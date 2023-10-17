@@ -37,7 +37,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger:"junit;LogFilePath=test-result-${{ matrix.dotnet-version }}.xml"
+      run: dotnet test --no-build --verbosity normal
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v3
       with:
