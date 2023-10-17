@@ -1,4 +1,4 @@
-namespace csd.Data;
+namespace webapp.Data;
 
 public class WeatherForecastService
 {

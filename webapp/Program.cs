@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using csd.Data;
+using webapp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

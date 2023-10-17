@@ -4,7 +4,7 @@
 name: .NET
 env:
   AZURE_WEBAPP_NAME: csd-demo    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_PACKAGE_PATH: 'webapp'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '7.0.x'             # set this to the dot net version to use
 
 on:
@@ -57,7 +57,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/app' 
+          dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}' 
 
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
@@ -65,4 +65,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/app'
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
