@@ -46,7 +46,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: website
-        path: webapp/website/**
+        path: website/**
         if-no-files-found: error
 
   build-and-deploy:
