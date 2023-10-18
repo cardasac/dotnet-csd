@@ -1,55 +1,51 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 env:
-  AZURE_WEBAPP_NAME: csd-demo    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '7.0.x'             # set this to the dot net version to use
+  AZURE_WEBAPP_NAME: csd-demo
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  DOTNET_VERSION: "7.0.x"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    - uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Publish
-      run: dotnet publish webapp/webapp.csproj -c Release -o website -r linux-x64 --self-contained true /p:UseAppHost=true
-#    - name: Upload dotnet test results
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: dotnet-results-${{ matrix.dotnet-version }}
-#        path: TestResults-${{ matrix.dotnet-version }}
-#      if: ${{ always() }}
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: website
-        path: website/**
-        if-no-files-found: error
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.xml"
+      - name: Publish
+        run: dotnet publish webapp/webapp.csproj -c Release -o website -r linux-x64 --self-contained true /p:UseAppHost=true
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "csd-tests/TestResults/*.xml"
+        if: always()
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: website
+          path: website/**
+          if-no-files-found: error
 
-  build-and-deploy:
+  deploy-staging:
     runs-on: ubuntu-latest
     environment: dev
     needs:
@@ -62,9 +58,9 @@ jobs:
           path: website
 
       # Deploy to Azure Web apps
-      - name: 'Run Azure webapp deploy action using publish profile credentials'
+      - name: "Run Azure webapp deploy action using publish profile credentials"
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website'
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website"
