@@ -16,16 +16,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: [ '6.0.x', '7.0.x' ]
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: ${{ env.DOTNET_VERSION }}
     - uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
@@ -38,12 +34,20 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Upload dotnet test results
+    - name: Publish
+      run: dotnet publish webapp/webapp.csproj -c Release -o website -r linux-x64 --self-contained true /p:UseAppHost=true
+#    - name: Upload dotnet test results
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: dotnet-results-${{ matrix.dotnet-version }}
+#        path: TestResults-${{ matrix.dotnet-version }}
+#      if: ${{ always() }}
+    - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: dotnet-results-${{ matrix.dotnet-version }}
-        path: TestResults-${{ matrix.dotnet-version }}
-      if: ${{ always() }}
+        name: website
+        path: webapp/website/**
+        if-no-files-found: error
 
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -51,19 +55,11 @@ jobs:
     needs:
       - build
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      - name: Install dependencies
-        run: dotnet restore
-      # Run dotnet build and publish
-      - name: dotnet build and publish
-        run: |
-          cd webapp
-          dotnet build --configuration Release --no-restore
-          dotnet publish -c Release -o ../dotnet-webapp -r linux-x64 --self-contained true /p:UseAppHost=true
+          name: website
+          path: website
 
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
@@ -71,4 +67,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/dotnet-webapp'
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website'
