@@ -39,7 +39,12 @@ jobs:
           name: website
           path: website/**
           if-no-files-found: error
-
+      - name: Run .NET Code Analysis
+        uses: dotnet/code-analysis@v1
+        id: code-analysis
+        with:
+          build-breaking: true
+          all-categories: all
   deploy-staging:
     runs-on: ubuntu-latest
     environment: dev
@@ -51,11 +56,9 @@ jobs:
         with:
           name: website
           path: website
-
-      # Deploy to Azure Web apps
       - name: "Run Azure webapp deploy action using publish profile credentials"
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
           package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website"
