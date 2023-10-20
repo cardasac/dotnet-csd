@@ -18,7 +18,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  Analysis:
+  sonarcloud:
     runs-on: ubuntu-latest
 
     steps:

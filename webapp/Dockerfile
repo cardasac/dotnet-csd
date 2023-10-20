@@ -15,6 +15,7 @@ FROM build AS publish
 RUN dotnet publish "webapp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+USER nonroot
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "webapp.dll"]
