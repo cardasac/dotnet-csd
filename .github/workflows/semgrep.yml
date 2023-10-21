@@ -16,6 +16,10 @@ on:
 
 jobs:
   semgrep:
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     # User definable name of this GitHub Actions job.
     name: semgrep/ci 
     # If you are self-hosting, change the following `runs-on` value: 
