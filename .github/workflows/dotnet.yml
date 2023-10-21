@@ -38,6 +38,26 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
+  snyk-os:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Snyk CLI to check for security issues
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif --all-projects
+          command: test
+
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
   snyk-docker:
     permissions:
       contents: read # for actions/checkout to fetch code
