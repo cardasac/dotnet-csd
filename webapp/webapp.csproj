@@ -16,4 +16,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Sentry.AspNetCore" Version="3.40.1" />
+    </ItemGroup>
+
 </Project>
