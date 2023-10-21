@@ -20,8 +20,8 @@ permissions:
 jobs:
   snyk-code:
     permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +40,8 @@ jobs:
           sarif_file: snyk.sarif
   snyk-os:
     permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,31 +62,30 @@ jobs:
           sarif_file: snyk.sarif
   snyk-docker:
     permissions:
-      contents: read # for actions/checkout to fetch code
-      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Build a Docker image
-      run: docker build -t webapp --file webapp/Dockerfile webapp
-    - name: Run Snyk to check Docker image for vulnerabilities
-      # Snyk can be used to break the build when it detects vulnerabilities.
-      # In this case we want to upload the issues to GitHub Code Scanning
-      continue-on-error: true
-      uses: snyk/actions/docker@14818c4695ecc4045f33c9cee9e795a788711ca4
-      env:
-        # In order to use the Snyk Action you will need to have a Snyk API token.
-        # More details in https://github.com/snyk/actions#getting-your-snyk-token
-        # or you can signup for free at https://snyk.io/login
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        image: webapp
-        args: --file=webapp/Dockerfile
-    - name: Upload result to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: snyk.sarif
+      - uses: actions/checkout@v4
+      - name: Build a Docker image
+        run: docker build -t webapp --file webapp/Dockerfile webapp
+      - name: Run Snyk to check Docker image for vulnerabilities
+        # Snyk can be used to break the build when it detects vulnerabilities.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: true
+        uses: snyk/actions/docker@14818c4695ecc4045f33c9cee9e795a788711ca4
+        env:
+          # In order to use the Snyk Action you will need to have a Snyk API token.
+          # More details in https://github.com/snyk/actions#getting-your-snyk-token
+          # or you can signup for free at https://snyk.io/login
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: webapp
+          args: --file=webapp/Dockerfile
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
   sonarcloud:
     runs-on: ubuntu-latest
 
@@ -102,10 +101,9 @@ jobs:
         with:
           args: -Dsonar.projectKey=cardasac_dotnet-csd
             -Dsonar.organization=cardasac
-            -Dsonar.scm.provider=git
 
   analyze:
-    name: Analyze
+    name: analyze
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
@@ -164,7 +162,7 @@ jobs:
           category: "/language:${{matrix.language}}"
 
   hadolint:
-    name: Run hadolint scanning
+    name: hadolint 
     runs-on: ubuntu-latest
     permissions:
       contents: read # for actions/checkout to fetch code
@@ -189,6 +187,7 @@ jobs:
           wait-for-processing: true
   build:
     runs-on: ubuntu-latest
+    needs: [snyk-code, snyk-os, snyk-docker, sonarcloud, analyze, hadolint]
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
