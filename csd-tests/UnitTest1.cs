@@ -4,7 +4,6 @@ namespace csd_tests;
 
 using System;
 using Xunit;
-using System.Linq;
 using System.Threading.Tasks;
 
 public class WeatherForecastServiceTest
@@ -44,6 +43,36 @@ public class WeatherForecastServiceTest
         foreach (var forecast in forecasts)
         {
             Assert.InRange(forecast.TemperatureC, -20, 55);
+        }
+    }
+
+    [Fact]
+    public async Task GetForecastAsync_ReturnsCorrectTemperatureInFahrenheit()
+    {
+        var startDate = new DateOnly(2023, 3, 21);
+        var forecasts = await _weatherForecastService.GetForecastAsync(startDate);
+        foreach (var forecast in forecasts)
+        {
+            var tempF = 32 + (int)(forecast.TemperatureC / 0.5556);
+            Assert.Equal(tempF, forecast.TemperatureF);
+        }
+    }
+
+    private static readonly string[] Summaries =
+    {
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
+
+    [Fact]
+    public async Task GetForecastAsync_ReturnsCorrectSummaries()
+    {
+        var startDate = new DateOnly(2023, 3, 21);
+        var forecasts = await _weatherForecastService.GetForecastAsync(startDate);
+
+        foreach (var forecast in forecasts)
+        {
+            Assert.NotNull(forecast.Summary);
+            Assert.Contains(forecast.Summary, Summaries);
         }
     }
 }
