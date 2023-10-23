@@ -175,7 +175,7 @@ jobs:
         run: |
           dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /o:"cardasac" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
-          dotnet end /d:sonar.token="$SONAR_TOKEN"
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   # deploy-staging:
   #   runs-on: ubuntu-latest
   #   environment: dev
