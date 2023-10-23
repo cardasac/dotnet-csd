@@ -153,7 +153,7 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           dotnet build --no-incremental
       - name: Test
-        run: dotnet test --collect "XPlat Code Coverage;Format=opencover" --logger "trx;logfilename=test-results.xml"
+        run: dotnet test csd-tests --collect "XPlat Code Coverage;Format=opencover" --logger "trx;logfilename=test-results.xml"
       - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
