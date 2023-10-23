@@ -151,9 +151,9 @@ jobs:
       - name: Install SonarCloud scanners and build
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet build
+          dotnet build --no-incremental
       - name: Test
-        run: dotnet test --no-build --verbosity normal --collect "Code Coverage"
+        run: dotnet test --collect "Code Coverage"
       - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
