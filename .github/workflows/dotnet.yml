@@ -153,13 +153,13 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           dotnet build --no-incremental
       - name: Test
-        run: dotnet test csd-tests --collect "XPlat Code Coverage;Format=opencover" --logger "trx;logfilename=test-results.xml"
+        run: dotnet test csd-tests --collect "Code Coverage" --logger "trx"
       - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
         run: |
-          dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /o:"cardasac" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=csd-tests/TestResults/**/coverage.opencover.xml  /d:sonar.cs.opencover.it.reportsPaths=csd-tests/TestResults/test-results.xml  /d:sonar.cs.vstest.reportsPaths=csd-tests/TestResults/test-results.xml 
+          dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /o:"cardasac" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=csd-tests/TestResults/**/*.coverage /d:sonar.cs.vstest.reportsPaths=csd-tests/TestResults/*.trx
           dotnet build
           dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   # deploy-staging:
