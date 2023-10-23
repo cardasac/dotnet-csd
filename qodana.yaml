@@ -9,8 +9,8 @@ profile:
   name: qodana.recommended
 
 #Enable inspections
-include:
-  - name: Audit
+#include:
+#  - name: <SomeEnabledInspectionId>
 
 #Disable inspections
 #exclude:
