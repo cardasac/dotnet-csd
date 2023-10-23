@@ -219,14 +219,23 @@ jobs:
         with:
           name: test-results
           path: TestResults
+#      - name: Cache SonarCloud packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ~\sonar\cache
+#          key: ${{ runner.os }}-sonar
+#          restore-keys: ${{ runner.os }}-sonar
+      - name: Install SonarCloud scanners
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
       - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@v2.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
-        with:
-          args: -Dsonar.projectKey=cardasac_dotnet-csd
-            -Dsonar.organization=cardasac
+        run: |
+          dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /d:sonar.token="$SONAR_TOKEN"
+          dotnet build
+          dotnet end /d:sonar.token="$SONAR_TOKEN"
   # deploy-staging:
   #   runs-on: ubuntu-latest
   #   environment: dev
