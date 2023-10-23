@@ -227,7 +227,6 @@ jobs:
         with:
           args: -Dsonar.projectKey=cardasac_dotnet-csd
             -Dsonar.organization=cardasac
-            -Dsonar.cs.dotcover.reportsPaths=TestResults
   # deploy-staging:
   #   runs-on: ubuntu-latest
   #   environment: dev
