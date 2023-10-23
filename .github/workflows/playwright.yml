@@ -12,8 +12,6 @@ jobs:
       image: mcr.microsoft.com/playwright/dotnet:v1.39.0-jammy
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Playwright test
         run: |
           dotnet test PlaywrightTests
