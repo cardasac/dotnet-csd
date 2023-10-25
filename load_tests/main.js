@@ -22,6 +22,6 @@ export const options = {
 }
 
 export default function main() {
-  let response = http.get('https://alex-csd.azurewebsites.net/')
+  http.get('https://alex-csd.azurewebsites.net/')
   sleep(1)
 }
