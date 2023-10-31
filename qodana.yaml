@@ -17,6 +17,12 @@ profile:
 #  - name: <SomeDisabledInspectionId>
 #    paths:
 #      - <path/where/not/run/inspection>
+exclude:
+  - name: Cache
+    paths:
+      - "**/bin/**"
+      - "**/obj/**"
+      - "**/cache/**"
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
