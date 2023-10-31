@@ -132,8 +132,12 @@ jobs:
           fetch-depth: 0
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
+        with:
+          cache-default-branch-only: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
@@ -300,11 +304,12 @@ jobs:
           dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /o:"cardasac" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=csd-tests/TestResults/**/coverage.opencover.xml /d:sonar.cs.vstest.reportsPaths=csd-tests/TestResults/*.trx
           dotnet build
           dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
-  deploy-production:
+
+  deploy-staging:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
-      name: production
+      name: staging
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     needs: build
     steps:
@@ -313,19 +318,43 @@ jobs:
         with:
           name: website
           path: website
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: "Run Azure webapp deploy action using publish profile credentials"
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: "Production"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_216FFB13F194465090A9670FC9B36FA4 }}
+          slot-name: staging
           package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website"
-
+      - name: az cli logout
+        run: az logout
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs : [k6_load_test, playwright]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: ${{ steps.slot_swap.outputs.url }}
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Swap staging slot into production
+        id: slot_swap
+        run: |
+          az webapp deployment slot swap -g csd -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          url=$(az webapp show -g csd -n ${{ env.AZURE_WEBAPP_NAME }} --query "defaultHostName" -o tsv)
+          echo "::set-output name=url::http://$url"
+      - name: az cli logout
+        run: az logout
   k6_load_test:
     name: k6 Load Test
     runs-on: ubuntu-latest
-    needs: deploy-production
+    needs: deploy-staging
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -340,7 +369,7 @@ jobs:
   playwright:
     name: 'Playwright Tests'
     runs-on: ubuntu-latest
-    needs: deploy-production
+    needs: deploy-staging
     container:
       image: mcr.microsoft.com/playwright/dotnet:v1.39.0-jammy
     steps:
