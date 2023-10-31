@@ -18,7 +18,7 @@ profile:
 #    paths:
 #      - <path/where/not/run/inspection>
 exclude:
-  - name: Cache
+  - name: All
     paths:
       - "**/bin/**"
       - "**/obj/**"
