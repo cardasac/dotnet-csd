@@ -415,6 +415,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Scan the web application
     needs: deploy-staging
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
