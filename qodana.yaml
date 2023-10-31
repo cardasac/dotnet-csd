@@ -7,20 +7,10 @@ version: "1.0"
 #Specify inspection profile for code analysis
 profile:
   name: qodana.recommended
-include:
-  - name: CheckDependencyLicenses
+
 #Enable inspections
 #include:
 #  - name: <SomeEnabledInspectionId>
-
-exclude:
-  - name: All
-    paths:
-      - "**/bin/**"
-      - "**/obj/**"
-      - "**/cache/**"
-      - qodana/cache
-
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
 
