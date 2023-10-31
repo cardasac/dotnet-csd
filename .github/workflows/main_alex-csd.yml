@@ -353,7 +353,7 @@ jobs:
         run: |
           az webapp deployment slot swap -g csd -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
           url=$(az webapp show -g csd -n ${{ env.AZURE_WEBAPP_NAME }} --query "defaultHostName" -o tsv)
-          echo "::set-output name=url::http://$url"
+          echo "{url}={https://$url}" >> $GITHUB_OUTPUT
       - name: az cli logout
         run: az logout
   k6_load_test:
