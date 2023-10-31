@@ -410,26 +410,7 @@ jobs:
           package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website"
       - name: az cli logout
         run: az logout
-  deploy-production:
-    runs-on: ubuntu-latest
-    needs: [k6_load_test, zap_scan]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: production
-      url: ${{ steps.slot_swap.outputs.url }}
-    steps:
-      - name: Login via Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Swap staging slot into production
-        id: slot_swap
-        run: |
-          az webapp deployment slot swap -g csd -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
-          url=$(az webapp show -g csd -n ${{ env.AZURE_WEBAPP_NAME }} --query "defaultHostName" -o tsv)
-          echo "{url}={https://$url}" >> $GITHUB_OUTPUT
-      - name: az cli logout
-        run: az logout
+
   zap_scan:
     runs-on: ubuntu-latest
     name: Scan the web application
@@ -458,3 +439,31 @@ jobs:
           filename: load_tests/main.js
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [k6_load_test, zap_scan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: ${{ steps.slot_swap.outputs.url }}
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Swap staging slot into production
+        id: slot_swap
+        run: |
+          az webapp deployment slot swap -g csd -n ${{ env.AZURE_WEBAPP_NAME }} -s staging
+          url=$(az webapp show -g csd -n ${{ env.AZURE_WEBAPP_NAME }} --query "defaultHostName" -o tsv)
+          echo "{url}={https://$url}" >> $GITHUB_OUTPUT
+      - name: az cli logout
+        run: az logout

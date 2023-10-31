@@ -1,15 +1,14 @@
 {
-  "name": "csd",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "cypress:open": "cypress open"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cypress": "^13.4.0"
-  }
+  },
+  "name": "csd",
+  "version": "1.0.0",
+  "main": "cypress.config.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
