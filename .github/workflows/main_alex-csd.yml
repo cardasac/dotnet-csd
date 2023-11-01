@@ -1,4 +1,6 @@
 name: .NET
+concurrency:
+  group: ${{ github.workflow }}
 env:
   AZURE_WEBAPP_NAME: alex-csd
   AZURE_WEBAPP_PACKAGE_PATH: "."
