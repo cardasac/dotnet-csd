@@ -418,6 +418,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
