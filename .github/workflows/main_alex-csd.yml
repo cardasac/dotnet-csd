@@ -164,6 +164,7 @@ jobs:
           push: true
           tags: |
             ${{env.IMAGE_NAME}}:latest
+            ghcr.io/${{env.IMAGE_NAME}}:latest
           cache-from: type=registry,ref=${{env.IMAGE_NAME}}:latest
           cache-to: type=inline
 
@@ -171,7 +172,7 @@ jobs:
         id: docker-scout
         uses: docker/scout-action@v1
         with:
-          command: cves,recommendations,compare
+          command: cves,recommendations
           to-latest: true
           ignore-base: true
           ignore-unchanged: true
