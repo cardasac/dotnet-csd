@@ -387,7 +387,7 @@ jobs:
     environment:
       name: staging
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    needs: build
+    needs: [build, docker-publish]
     outputs:
       webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
