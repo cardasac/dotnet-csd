@@ -163,7 +163,7 @@ jobs:
       - name: Docker Scout
         id: docker-scout
         uses: docker/scout-action@v1
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request_target' }}
         with:
           command: cves,recommendations
           to-latest: true
