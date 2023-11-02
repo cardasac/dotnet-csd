@@ -414,7 +414,6 @@ jobs:
 
   zap_scan:
     runs-on: ubuntu-latest
-    name: Scan the web application
     needs: deploy-staging
     permissions:
       contents: read
@@ -431,7 +430,6 @@ jobs:
           target: ${{ needs.deploy-staging.outputs.webapp-url }}
           cmd_options: "-a"
   k6_load_test:
-    name: k6 Load Test
     runs-on: ubuntu-latest
     needs: deploy-staging
     steps:
