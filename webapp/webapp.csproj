@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Sentry.AspNetCore" Version="3.40.1" />
+      <PackageReference Include="Sentry.AspNetCore" Version="3.41.0" />
     </ItemGroup>
 
 </Project>
