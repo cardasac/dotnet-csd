@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Components.Web;
 using webapp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+// The following line enables Application Insights telemetry collection.
+builder.Services.AddApplicationInsightsTelemetry();
 
+// This code adds other services for your application.
+builder.Services.AddMvc();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
