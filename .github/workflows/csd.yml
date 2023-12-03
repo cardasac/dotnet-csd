@@ -165,6 +165,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' 
+          cache: 'poetry'
+      - run: poetry install
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
         with:
@@ -226,7 +231,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build a Docker image
-        run: docker build -t webapp --file webapp/Dockerfile webapp
+        run: docker build -t webapp .
       - name: Run Snyk to check Docker image for vulnerabilities
         continue-on-error: true
         uses: snyk/actions/docker@14818c4695ecc4045f33c9cee9e795a788711ca4
@@ -234,7 +239,6 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: webapp
-          args: --file=webapp/Dockerfile
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
@@ -268,12 +272,11 @@ jobs:
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run hadolint
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./webapp/Dockerfile
           format: sarif
           output-file: hadolint-results.sarif
           no-fail: true
@@ -283,154 +286,106 @@ jobs:
         with:
           sarif_file: hadolint-results.sarif
           wait-for-processing: true
-  build:
-    runs-on: ubuntu-latest
-    needs:
-      [
-        snyk-code,
-        snyk-os,
-        snyk-docker,
-        hadolint,
-        sonarcloud,
-        trivy,
-        qodana,
-        analyze,
-        semgrep,
-      ]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      - uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --no-restore
-      - name: Publish
-        run: dotnet publish webapp/webapp.csproj -c Release -o website -r linux-x64 --self-contained true /p:UseAppHost=true
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: website
-          path: website/**
-          if-no-files-found: error
+
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
-      - name: Install SonarCloud scanners and build
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet build --no-incremental
-      - name: Test
-        run: dotnet test csd-tests --collect "XPlat Code Coverage;Format=opencover" --logger "trx"
-      - name: Analyze with SonarCloud
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=cardasac
+            -Dsonar.projectKey=cardasac_dotnet-csd
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.test.exclusions=tests/**
+            -Dsonar.tests=tests/
+            -Dsonar.verbose=true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
-        run: |
-          dotnet sonarscanner begin /k:"cardasac_dotnet-csd" /o:"cardasac" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=csd-tests/TestResults/**/coverage.opencover.xml /d:sonar.cs.vstest.reportsPaths=csd-tests/TestResults/*.trx
-          dotnet build
-          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  deploy-staging:
+  build:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: staging
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    needs: [build, docker-publish]
-    outputs:
-      webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    # environment:
+    #   name: staging
+    #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    # outputs:
+    #   webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
         with:
-          name: website
-          path: website
-      - name: Login via Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: "Run Azure webapp deploy action using publish profile credentials"
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: staging
-          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/website"
-      - name: az cli logout
-        run: az logout
+          python-version: '3.11'
+          cache: 'poetry'
+      - run: poetry install
 
-  zap_scan:
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    permissions:
-      contents: read
-      security-events: write
-      issues: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.10.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: "ghcr.io/zaproxy/zaproxy:stable"
-          target: ${{ needs.deploy-staging.outputs.webapp-url }}
-          cmd_options: "-a"
-  k6_load_test:
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # zap_scan:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-staging
+  #   permissions:
+  #     contents: read
+  #     security-events: write
+  #     issues: write
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: ZAP Scan
+  #       uses: zaproxy/action-baseline@v0.10.0
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         docker_name: "ghcr.io/zaproxy/zaproxy:stable"
+  #         target: ${{ needs.deploy-staging.outputs.webapp-url }}
+  #         cmd_options: "-a"
+  # k6_load_test:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-staging
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Run k6 cloud test
-        uses: grafana/k6-action@v0.3.0
-        with:
-          filename: load_tests/main.js
-          cloud: true
-          token: ${{ secrets.K6_CLOUD_API_TOKEN }}
-  cypress-run:
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+  #     - name: Run k6 cloud test
+  #       uses: grafana/k6-action@v0.3.0
+  #       with:
+  #         filename: load_tests/main.js
+  #         cloud: true
+  #         token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+  # cypress-run:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-staging
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v6
 
-  deploy-production:
-    runs-on: ubuntu-latest
-    needs: [k6_load_test, zap_scan, cypress-run]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: production
-      url: ${{ steps.slot_swap.outputs.url }}
-    steps:
-      - name: Login via Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Swap staging slot into production
-        id: slot_swap
-        run: |
-          az webapp deployment slot swap -g csd -n $AZURE_WEBAPP_NAME -s staging
-          url=$(az webapp show -g csd -n $AZURE_WEBAPP_NAME --query "defaultHostName" -o tsv)
-          echo "{url}={https://$url}" >> $GITHUB_OUTPUT
-      - name: az cli logout
-        run: az logout
+  # deploy-production:
+  #   runs-on: ubuntu-latest
+  #   needs: [k6_load_test, zap_scan, cypress-run]
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   environment:
+  #     name: production
+  #     url: ${{ steps.slot_swap.outputs.url }}
+  #   steps:
+  #     - name: Login via Azure CLI
+  #       uses: azure/login@v1
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Swap staging slot into production
+  #       id: slot_swap
+  #       run: |
+  #         az webapp deployment slot swap -g csd -n $AZURE_WEBAPP_NAME -s staging
+  #         url=$(az webapp show -g csd -n $AZURE_WEBAPP_NAME --query "defaultHostName" -o tsv)
+  #         echo "{url}={https://$url}" >> $GITHUB_OUTPUT
+  #     - name: az cli logout
+  #       run: az logout

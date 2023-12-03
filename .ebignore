@@ -17,3 +17,8 @@ README.md
 SECURITY.md
 tests
 node_modules
+terraform.tfstate
+terraform.tfstate.backup
+main.tf
+.terraform.lock.hcl
+.terraform
