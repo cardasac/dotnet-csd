@@ -1,5 +1,5 @@
-from flask import Flask, render_template
 from asgiref.wsgi import WsgiToAsgi
+from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 
 application = Flask(__name__, template_folder="src/templates")
