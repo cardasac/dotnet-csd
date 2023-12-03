@@ -19,6 +19,7 @@ sentry_sdk.init(
     profiles_sample_rate=1.0,
     enable_tracing=True,
     auto_session_tracking=True,
+    debug=True,
 )
 
 ASGI = WsgiToAsgi(APP)
@@ -27,4 +28,6 @@ ASGI = WsgiToAsgi(APP)
 @APP.route("/")
 def hello_world() -> str:
     """Return main page."""
+    APP.logger.error("Hello World")
+
     return render_template("hello.html")
