@@ -1,10 +1,8 @@
-name: .NET
+name: webapp
 concurrency:
   group: ${{ github.workflow }}
 env:
-  AZURE_WEBAPP_NAME: alex-csd
-  AZURE_WEBAPP_PACKAGE_PATH: "."
-  DOTNET_VERSION: "7.0.x"
+  PYTHON_VERSION: "3.10"
   IMAGE_NAME: ${{ github.repository }}
 on:
   push:
@@ -39,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["csharp", "javascript-typescript"]
+        language: ["python", "javascript-typescript"]
 
     steps:
       - name: Checkout repository
@@ -186,7 +184,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Snyk CLI to check for security issues
-        uses: snyk/actions/dotnet@master
+        uses: snyk/actions/python-3.10@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
