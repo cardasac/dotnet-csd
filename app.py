@@ -5,7 +5,8 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 
 
-def create_app():
+def create_app() -> Flask:
+    """Create and configure an instance of the Flask application."""
     app = Flask(__name__, template_folder="src/templates")
     csrf = CSRFProtect()
     csrf.init_app(app)
