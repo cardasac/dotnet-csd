@@ -1,4 +1,5 @@
 """Main entry point to the app."""
+from __future__ import annotations
 
 import sentry_sdk
 from flask import Flask
