@@ -91,19 +91,7 @@ jobs:
         if: always()
   docker-publish:
     runs-on: ubuntu-latest
-    needs:
-      [
-        snyk-code,
-        snyk-os,
-        snyk-docker,
-        hadolint,
-        sonarcloud,
-        trivy,
-        qodana,
-        analyze,
-        semgrep,
-        build
-      ]
+    needs: [build]
     permissions:
       contents: read
       packages: write
@@ -340,7 +328,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [sonarcloud, qodana, semgrep, analyze, snyk-os, snyk-code, snyk-docker, trivy, hadolint]
+    needs:
+      [
+        sonarcloud,
+        qodana,
+        semgrep,
+        analyze,
+        snyk-os,
+        snyk-code,
+        snyk-docker,
+        trivy,
+        hadolint,
+      ]
     # environment:
     #   name: staging
     #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -369,7 +368,7 @@ jobs:
       - name: Set up NPM
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: "20.x"
       - name: Install and run pyright
         run: |
           npm install -g pyright
@@ -389,20 +388,7 @@ jobs:
     #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     # outputs:
     #   webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    needs:
-      [
-        build,
-        analyze,
-        snyk-os,
-        snyk-code,
-        snyk-docker,
-        qodana,
-        semgrep,
-        sonarcloud,
-        trivy,
-        hadolint,
-        docker-publish,
-      ]
+    needs: [build, docker-publish]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
