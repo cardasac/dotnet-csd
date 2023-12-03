@@ -353,7 +353,20 @@ jobs:
     #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     # outputs:
     #   webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    needs: [build, analyze, snyk-os, snyk-code, snyk-docker, qodana, semgrep, sonarcloud, trivy, hadolint]
+    needs:
+      [
+        build,
+        analyze,
+        snyk-os,
+        snyk-code,
+        snyk-docker,
+        qodana,
+        semgrep,
+        sonarcloud,
+        trivy,
+        hadolint,
+        docker-publish,
+      ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
