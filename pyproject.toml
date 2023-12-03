@@ -16,11 +16,51 @@ flask-wtf = "^1.2.1"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
 black = "^23.11.0"
+pyre = "^1.12.3"
+semgrep = "^1.51.0"
 
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 79
+select = ["ALL"]
+src = ["src", "tests"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".",
+]
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/node_modules", "**/__pycache__", "src/experimental", "src/typestubs"]
+defineConstant = { DEBUG = true }
+
+reportUnusedFunction = true
+reportUnusedImport = true
+reportUnusedClass = true
+reportUnusedVariable = true
+reportDuplicateImport = true
+strictListInference = true
+reportMissingImports = true
+reportMissingTypeStubs = false
+analyzeUnannotatedFunctions = true
+deprecateTypingAliases = true
+reportConstantRedefinition = true
+reportShadowedImports = true
+reportUnusedExpression = true
+
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+typeCheckingMode = "basic"
+
+executionEnvironments = [
+  { root = "src" },
+]

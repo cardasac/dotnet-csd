@@ -2,7 +2,7 @@ name: webapp
 concurrency:
   group: ${{ github.workflow }}
 env:
-  PYTHON_VERSION: "3.10"
+  PYTHON_VERSION: "3.11"
   IMAGE_NAME: ${{ github.repository }}
 on:
   push:
@@ -25,6 +25,16 @@ permissions:
   pull-requests: read
 
 jobs:
+  review-with-sourcery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: sourcery-ai/action@v1
+        with:
+          token: ${{ secrets.SOURCERY_TOKEN }}
   analyze:
     name: analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
@@ -170,7 +180,7 @@ jobs:
         run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry"
       - run: |
           pipx inject poetry poetry-plugin-export
@@ -330,9 +340,10 @@ jobs:
         run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry"
-      - run: poetry install
+      - run: poetry install --no-root --with dev,test
+      - run: poetry run pytest --cov=src --cov-report=xml tests/
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -344,7 +355,7 @@ jobs:
           pipx inject poetry poetry-plugin-export
           poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test
           pip install awsebcli
-          eb init -p python-3.11 --region eu-west-1 csd
+          eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
           eb appversion -c -l ${{ github.run_number }}
   deploy-staging:
     runs-on: ubuntu-latest
@@ -372,7 +383,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -383,7 +394,7 @@ jobs:
       - name: Deploy staging
         run: |
           pip install awsebcli
-          eb init -p python-3.11 --region eu-west-1 csd
+          eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
           eb deploy --version ${{ github.run_number }} staging
   deploy-production:
     runs-on: ubuntu-latest
@@ -398,7 +409,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -409,7 +420,7 @@ jobs:
       - name: Deploy production
         run: |
           pip install awsebcli
-          eb init -p python-3.11 --region eu-west-1 csd
+          eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
           eb deploy --version ${{ github.run_number }} production
   # zap_scan:
   #   runs-on: ubuntu-latest
