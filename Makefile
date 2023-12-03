@@ -17,3 +17,7 @@ clone:
 swap:
 	eb init -p python-3.11 --region eu-west-1 docker-csd
 	eb swap csd-env-earth  -n  csd-env-water
+
+local:
+	docker build -t csd .
+	docker run -p 80:80 csd

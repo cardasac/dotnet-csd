@@ -216,7 +216,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Set up Snyk CLI to check for security issues
-        uses: snyk/actions/dotnet@master
+        uses: snyk/actions/python-3.10@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -394,7 +394,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
-      - name: Deploy staging
+      - name: Deploy production
         run: |
           pip install awsebcli
           eb init -p python-3.11 --region eu-west-1 csd
