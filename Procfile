@@ -1,1 +1,1 @@
-web: uvicorn --workers 4 app:asgi_app
+web: uvicorn --workers 4 app:ASGI
