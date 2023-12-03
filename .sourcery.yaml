@@ -8,6 +8,7 @@ ignore:
   - .tox
   - node_modules
   - vendor
+  - tests
 rule_settings:
   enable:
     - default
