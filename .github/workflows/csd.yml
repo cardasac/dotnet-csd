@@ -171,7 +171,9 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'poetry'
-      - run: poetry install
+      - run: |
+          poetry export -f requirements.txt --output requirements.txt --without-hashes
+          poetry install
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
         with:
