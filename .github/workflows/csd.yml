@@ -2,7 +2,7 @@ name: webapp
 concurrency:
   group: ${{ github.workflow }}
 env:
-  PYTHON_VERSION: "3.11"
+  PYTHON_VERSION: 3.11
   IMAGE_NAME: ${{ github.repository }}
 on:
   push:
@@ -379,7 +379,7 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb appversion -c -l ${{ github.run_number }}
+          eb appversion -c -l $GITHUB_RUN_ID
   deploy-staging:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -405,8 +405,8 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb deploy --version ${{ github.run_number }} staging
-          eb setenv SENTRY_RELEASE=${{ github.run_number }}
+          eb deploy --version $GITHUB_RUN_ID staging
+          eb setenv SENTRY_RELEASE=$GITHUB_RUN_ID
   deploy-production:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -432,8 +432,8 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb deploy --version ${{ github.run_number }} production
-          eb setenv SENTRY_RELEASE=${{ github.run_number }}
+          eb deploy --version $GITHUB_RUN_ID production
+          eb setenv SENTRY_RELEASE=$GITHUB_RUN_ID
   zap_scan:
     runs-on: ubuntu-latest
     needs: deploy-staging
