@@ -463,7 +463,7 @@ jobs:
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
         env: 
-          APP_URL: ${{ secrets.APP_HOSTNAME }}
+          APP_HOSTNAME: ${{ secrets.APP_HOSTNAME }}
   cypress-run:
     runs-on: ubuntu-latest
     needs: deploy-staging
