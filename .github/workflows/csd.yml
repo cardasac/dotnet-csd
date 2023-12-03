@@ -414,7 +414,7 @@ jobs:
     #   url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     # outputs:
     #   webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    needs: [k6_load_test, zap_scan]
+    needs: [k6_load_test, zap_scan, cypress-run]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
