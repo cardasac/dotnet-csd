@@ -10,8 +10,12 @@ profile:
 
 bootstrap: |+
   # Install dependencies
-  pip install -r requirements.txt
+  rm -rf .idea && python -m venv /data/cache/venv && /data/cache/venv/bin/pip install -r requirements.txt --quiet
 
+exclude:
+  - name: All
+    paths:
+      - venv
 include:
   - name: CheckDependencyLicenses
 #Enable inspections
