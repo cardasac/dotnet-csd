@@ -29,9 +29,6 @@ check-format:
 
 lint:
 	poetry run ruff $(SRC)
-	# poetry run pylint $(SRC)
-	# poetry run pyre
-	# poetry run mypy $(SRC)
 	poetry run semgrep scan --config auto
 
 format:

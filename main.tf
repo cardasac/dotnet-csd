@@ -34,19 +34,20 @@ locals {
       namespace = "aws:ec2:instances"
       name      = "InstanceTypes"
       value     = "t4g.micro"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = "UVICORN_SENTRY_DNS"
+      value     = var.sentry_dns
     }
   ]
 
   environment_settings = {
     staging = [
+
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SENTRY_DNS"
-        value     = var.sentry_dns
-      },
-      {
-        namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SENTRY_ENVIRONMENT"
+        name      = "UVICORN_SENTRY_ENVIRONMENT"
         value     = "staging"
       }
     ],
@@ -58,7 +59,7 @@ locals {
       },
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SENTRY_ENVIRONMENT"
+        name      = "UVICORN_SENTRY_ENVIRONMENT"
         value     = "production"
       }
     ]
