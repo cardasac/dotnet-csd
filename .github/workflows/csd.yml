@@ -165,12 +165,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11' 
-          cache: 'poetry'
       - name: Install poetry
         run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'poetry'
       - run: poetry install
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
