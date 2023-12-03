@@ -16,9 +16,10 @@ flask-wtf = "^1.2.1"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
 black = "^23.11.0"
-pyre = "^1.12.3"
 semgrep = "^1.51.0"
 sourcery = "^1.14.0"
+pyre-check = "^0.9.19"
+mypy = "^1.7.1"
 
 
 [tool.poetry.group.test.dependencies]
