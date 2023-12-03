@@ -4,13 +4,9 @@ from app import create_app
 
 @pytest.fixture()
 def app():
-    app = create_app({
+    return create_app({
         "TESTING": True,
     })
-
-    return app
-
-    # clean up / reset resources here
 
 
 @pytest.fixture()
