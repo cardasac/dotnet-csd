@@ -22,7 +22,7 @@ local:
 	docker build -t csd .
 	docker run -p 80:80 csd
 
-SRC := src
+SRC := src app.py
 
 check-format:
 	poetry run black --line-length=79 --check $(SRC)

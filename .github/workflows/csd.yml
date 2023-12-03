@@ -25,16 +25,16 @@ permissions:
   pull-requests: read
 
 jobs:
-  review-with-sourcery:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - uses: sourcery-ai/action@v1
-        with:
-          token: ${{ secrets.SOURCERY_TOKEN }}
+  # review-with-sourcery:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ env.PYTHON_VERSION }}
+  #     - uses: sourcery-ai/action@v1
+  #       with:
+  #         token: ${{ secrets.SOURCERY_TOKEN }}
   analyze:
     name: analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
