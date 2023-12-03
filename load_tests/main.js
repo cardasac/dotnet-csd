@@ -22,6 +22,6 @@ export const options = {
 }
 
 export default function main() {
-  http.get('http://csd-staging.eu-west-1.elasticbeanstalk.com/')
+  http.get(`http://${__ENV.APP_URL}/`)
   sleep(1)
 }

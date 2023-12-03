@@ -463,6 +463,8 @@ jobs:
           filename: load_tests/main.js
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+        env: 
+          APP_URL: ${{ secrets.APP_URL}}
   # cypress-run:
   #   runs-on: ubuntu-latest
   #   needs: deploy-staging
