@@ -362,7 +362,6 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      - run: poetry install
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
