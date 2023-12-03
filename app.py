@@ -22,8 +22,8 @@ def create_app():
         auto_session_tracking=True,
         debug=True,
     )
-    from src.root import root
+    from src.root import ROOT
 
-    app.register_blueprint(root)
+    app.register_blueprint(ROOT)
 
     return app

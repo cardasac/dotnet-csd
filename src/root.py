@@ -1,11 +1,12 @@
+"""Root blueprint."""
 import logging
 
 from flask import Blueprint, render_template
 
-root = Blueprint("root", __name__)
+ROOT = Blueprint("root", __name__)
 
 
-@root.route("/")
+@ROOT.route("/")
 def hello_world() -> str:
     """Return main page."""
     logging.error("Hello, World!")
