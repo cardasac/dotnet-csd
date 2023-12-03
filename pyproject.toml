@@ -11,6 +11,7 @@ flask = "^3.0.0"
 uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 asgiref = "^3.7.2"
 flask-wtf = "^1.2.1"
+sentry-sdk = {extras = ["flask"], version = "^1.38.0"}
 
 
 [tool.poetry.group.dev.dependencies]

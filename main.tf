@@ -3,6 +3,11 @@ resource "aws_elastic_beanstalk_application" "csd" {
   description = "Main app"
 }
 
+variable "sentry_dns" {
+  type      = string
+  sensitive = true
+}
+
 locals {
   common_settings = [
     {
@@ -34,12 +39,27 @@ locals {
 
   environment_settings = {
     staging = [
+      {
+        namespace = "aws:elasticbeanstalk:application:environment"
+        name      = "SENTRY_DNS"
+        value     = var.sentry_dns
+      },
+      {
+        namespace = "aws:elasticbeanstalk:application:environment"
+        name      = "SENTRY_ENVIRONMENT"
+        value     = "staging"
+      }
     ],
     production = [
       {
         namespace = "aws:elasticbeanstalk:command"
         name      = "DeploymentPolicy"
         value     = "Immutable"
+      },
+      {
+        namespace = "aws:elasticbeanstalk:application:environment"
+        name      = "SENTRY_ENVIRONMENT"
+        value     = "production"
       }
     ]
   }
