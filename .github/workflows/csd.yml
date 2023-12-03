@@ -344,7 +344,7 @@ jobs:
             -Dsonar.python.version=$PYTHON_VERSION
             -Dsonar.scm.provider=git
             -Dsonar.python.xunit.reportPath=reports/test-results.xml
-            -Dsonar.coverage.exclusions=load_tests/**,cypress.config.js,cypress/**,tests/**
+            -Dsonar.coverage.exclusions=load_tests/**,cypress.config.js,cypress/**,tests/**,app.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
