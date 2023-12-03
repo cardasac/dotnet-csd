@@ -3,7 +3,6 @@
 import sentry_sdk
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 
 def create_app() -> Flask:
@@ -22,13 +21,12 @@ def create_app() -> Flask:
         profiles_sample_rate=1.0,
         enable_tracing=True,
         auto_session_tracking=True,
-        debug=True,
     )
     from src.root import ROOT
 
     app.register_blueprint(ROOT)
 
-    return SentryWsgiMiddleware(app)
+    return app
 
 
 APP = create_app()
