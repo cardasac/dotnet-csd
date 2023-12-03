@@ -22,3 +22,5 @@ terraform.tfstate.backup
 main.tf
 .terraform.lock.hcl
 .terraform
+.pyre_configuration
+.sourcery_yaml

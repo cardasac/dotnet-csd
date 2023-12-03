@@ -1,1 +1,1 @@
-web: uvicorn app:ASGI
+web: uvicorn --host 0.0.0.0 app:ASGI 
