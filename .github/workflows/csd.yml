@@ -169,8 +169,8 @@ jobs:
         run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-          cache: 'poetry'
+          python-version: "3.11"
+          cache: "poetry"
       - run: |
           poetry export -f requirements.txt --output requirements.txt --without-hashes
           poetry install
@@ -330,9 +330,15 @@ jobs:
         run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-          cache: 'poetry'
+          python-version: "3.11"
+          cache: "poetry"
       - run: poetry install
+      - name: Build version
+        run: |
+          poetry export -f requirements.txt --output requirements.txt --without-hashes
+          pip install awsebcli
+          eb init -p python-3.11 --region eu-west-1 csd
+          eb appversion -c -l ${{ github.run_number }}
 
   # zap_scan:
   #   runs-on: ubuntu-latest
