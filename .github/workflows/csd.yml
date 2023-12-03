@@ -369,7 +369,6 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
-      - run: poetry run pytest tests
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
