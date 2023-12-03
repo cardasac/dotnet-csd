@@ -180,10 +180,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: "poetry"
-      - run: |
-          pipx inject poetry poetry-plugin-export
-          poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test
+          cache: "pip"
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
         with:

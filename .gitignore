@@ -340,12 +340,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-requirements.txt
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-requirements.txt
 
 # Local .terraform directories
 **/.terraform/*

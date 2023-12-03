@@ -39,3 +39,6 @@ format:
 	# poetry run docformatter --in-place -r $(SRC)
 	poetry run sourcery review --fix $(SRC)
 	poetry run ruff --fix .
+
+update-deps:
+	poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev,test
