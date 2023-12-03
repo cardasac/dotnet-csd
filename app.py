@@ -1,3 +1,4 @@
+"""Main entry point to the app."""
 from asgiref.wsgi import WsgiToAsgi
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect

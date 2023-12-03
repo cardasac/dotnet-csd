@@ -362,6 +362,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
+      - name: Lint check
+        run: make lint >> $GITHUB_STEP_SUMMARY
+      - name: Check format of the code
+        run: make check-format
+      - name: Set up NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - name: Install and run pyright
+        run: |
+          npm install -g pyright
+          pyright
       - name: Build version
         run: |
           pipx inject poetry poetry-plugin-export
