@@ -13,4 +13,4 @@ COPY src/templates ./src/templates
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 USER nonroot
 
-CMD ["uvicorn", "--workers", "4", "app:ASGI", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app:ASGI", "--host", "0.0.0.0", "--port", "80"]

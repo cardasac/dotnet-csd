@@ -3,7 +3,7 @@ import sentry_sdk
 from asgiref.wsgi import WsgiToAsgi
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
-
+import logging
 APP = Flask(__name__, template_folder="src/templates")
 CSRF = CSRFProtect()
 CSRF.init_app(APP)
@@ -28,6 +28,6 @@ ASGI = WsgiToAsgi(APP)
 @APP.route("/")
 def hello_world() -> str:
     """Return main page."""
-    APP.logger.error("Hello World")
+    logging.error("Hello, World!")
 
     return render_template("hello.html")
