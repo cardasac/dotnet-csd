@@ -9,6 +9,7 @@ CSRF.init_app(APP)
 
 ASGI = WsgiToAsgi(APP)
 
+
 @APP.route("/")
 def hello_world() -> str:
     """Return main page."""

@@ -22,6 +22,6 @@ export const options = {
 }
 
 export default function main() {
-  http.get('https://alex-csd-staging.azurewebsites.net/')
+  http.get('http://csd-staging.eu-west-1.elasticbeanstalk.com/')
   sleep(1)
 }
