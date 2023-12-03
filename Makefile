@@ -4,7 +4,7 @@ create:
 
 deploy:
 	eb init -p python-3.11 --region eu-west-1 csd
-	eb deploy -l 1 staging
+	eb deploy staging
 
 deploy-1:
 	eb init -p python-3.11 --region eu-west-1 csd

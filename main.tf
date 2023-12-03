@@ -37,7 +37,7 @@ locals {
     },
     {
       namespace = "aws:elasticbeanstalk:application:environment"
-      name      = "UVICORN_SENTRY_DNS"
+      name      = "SENTRY_DSN"
       value     = var.sentry_dns
     }
   ]
@@ -47,7 +47,7 @@ locals {
 
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "UVICORN_SENTRY_ENVIRONMENT"
+        name      = "SENTRY_ENVIRONMENT"
         value     = "staging"
       }
     ],
@@ -59,7 +59,7 @@ locals {
       },
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "UVICORN_SENTRY_ENVIRONMENT"
+        name      = "SENTRY_ENVIRONMENT"
         value     = "production"
       }
     ]
