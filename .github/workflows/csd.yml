@@ -333,6 +333,12 @@ jobs:
           python-version: "3.11"
           cache: "poetry"
       - run: poetry install
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
       - name: Build version
         run: |
           poetry export -f requirements.txt --output requirements.txt --without-hashes
