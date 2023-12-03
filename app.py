@@ -1,9 +1,11 @@
 """Main entry point to the app."""
+import logging
+
 import sentry_sdk
 from asgiref.wsgi import WsgiToAsgi
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
-import logging
+
 APP = Flask(__name__, template_folder="src/templates")
 CSRF = CSRFProtect()
 CSRF.init_app(APP)
