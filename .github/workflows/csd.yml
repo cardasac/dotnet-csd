@@ -169,9 +169,9 @@ jobs:
         with:
           python-version: '3.11' 
           cache: 'poetry'
-      - run: |
-          pipx install poetry
-          poetry install
+      - name: Install poetry
+        run: pipx install poetry
+      - run: poetry install
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
         with:
@@ -330,9 +330,7 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'poetry'
-      - run: |
-          pipx install poetry
-          poetry install
+      - run: poetry install
 
   # zap_scan:
   #   runs-on: ubuntu-latest
