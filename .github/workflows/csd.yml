@@ -368,13 +368,10 @@ jobs:
     #   webapp-url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: "poetry"
-      - run: poetry install --no-root --without dev,test
+          cache: "pip"
       - run: poetry run pytest tests
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -384,8 +381,6 @@ jobs:
           aws-region: eu-west-1
       - name: Build version
         run: |
-          pipx inject poetry poetry-plugin-export
-          poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
           eb appversion -c -l ${{ github.run_number }}

@@ -41,4 +41,4 @@ format:
 	poetry run ruff --fix .
 
 update-deps:
-	poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev,test
+	poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test

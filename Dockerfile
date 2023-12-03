@@ -1,14 +1,16 @@
-FROM python:3.11-alpine
-RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
-USER nonroot
+FROM python:3.11-alpine AS base
+
 WORKDIR /app
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+FROM base AS serve
+
 COPY app.py .
 COPY src/templates ./src/templates
-RUN pip install poetry
 
-COPY pyproject.toml .
-COPY poetry.lock .
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
+USER nonroot
 
-RUN python -m poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test && \
-    pip install -r requirements.txt
-CMD ["uvicorn", "--workers", "4", "app:asgi_app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "--workers", "4", "app:ASGI", "--host", "0.0.0.0", "--port", "80"]

@@ -13,5 +13,6 @@ exclude:
       - venv
 include:
   - name: CheckDependencyLicenses
+  - name: All
 
 linter: jetbrains/qodana-python:latest
