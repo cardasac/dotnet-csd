@@ -355,7 +355,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry"
       - run: poetry install --no-root --with dev,test
-      - run: poetry run pytest --cov=src --cov-branch --cov-report=xml:junit/coverage.xml --junitxml=test-results.xml tests
+      - run: poetry run pytest --cov=src --cov-branch --cov-report=xml:coverage.xml --junitxml=test-results.xml tests
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
