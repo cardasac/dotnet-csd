@@ -175,7 +175,6 @@ jobs:
       - run: |
           pipx inject poetry poetry-plugin-export
           poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test
-          poetry install
       - name: "Qodana Scan"
         uses: JetBrains/qodana-action@v2023.2
         with:

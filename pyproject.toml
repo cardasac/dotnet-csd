@@ -6,7 +6,7 @@ authors = ["Alexandru Constantin Cardas <calexc@alviralex.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.8, <3.12"
 flask = "^3.0.0"
 uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 asgiref = "^3.7.2"
