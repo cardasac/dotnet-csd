@@ -1,1 +1,1 @@
-web: uvicorn --host 0.0.0.0 app:ASGI 
+web: gunicorn --bind :8000 --workers 3 --threads 2 --preload "app:create_app()"
