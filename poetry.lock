@@ -1287,6 +1287,18 @@ files = [
 ]
 
 [[package]]
+name = "sourcery"
+version = "1.14.0"
+description = "Magically refactor Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "sourcery-1.14.0-py2.py3-none-macosx_10_9_universal2.whl", hash = "sha256:208dbf69e0c3b145bbb18a3f7d082a849cc61ac7b51df323291ccddc92025433"},
+    {file = "sourcery-1.14.0-py2.py3-none-manylinux1_x86_64.whl", hash = "sha256:12a79c93f8f7baddde77678d7a69b81cdea51e4ceafa8d6be5caf21b66eb71f8"},
+    {file = "sourcery-1.14.0-py2.py3-none-win_amd64.whl", hash = "sha256:15b056baae7440319e3866ff0e524484d4899665c0669c7b20044e4d7869204a"},
+]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -1628,4 +1640,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.12"
-content-hash = "5a704d1badfde3ae390ceb292056f340cd04569e5f3ee23c37ffda3f75766589"
+content-hash = "c7c9e0a82ce8bc28c6f35283c9aa685a613729f5a282fe77f13b7f0ce16fbe35"
