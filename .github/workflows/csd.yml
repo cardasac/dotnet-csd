@@ -379,7 +379,7 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb appversion -c -l $GITHUB_RUN_ID
+          eb appversion -c -l $GITHUB_RUN_NUMBER
   deploy-staging:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -405,8 +405,8 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb deploy --version $GITHUB_RUN_ID staging
-          eb setenv SENTRY_RELEASE=$GITHUB_RUN_ID
+          eb deploy --version $GITHUB_RUN_NUMBER staging
+          eb setenv SENTRY_RELEASE=$GITHUB_RUN_NUMBER
   deploy-production:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -432,8 +432,8 @@ jobs:
         run: |
           pip install awsebcli
           eb init -p python-$PYTHON_VERSION --region eu-west-1 csd
-          eb deploy --version $GITHUB_RUN_ID production
-          eb setenv SENTRY_RELEASE=$GITHUB_RUN_ID
+          eb deploy --version $GITHUB_RUN_NUMBER production
+          eb setenv SENTRY_RELEASE=$GITHUB_RUN_NUMBER
   zap_scan:
     runs-on: ubuntu-latest
     needs: deploy-staging
