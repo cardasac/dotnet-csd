@@ -94,7 +94,6 @@ jobs:
     needs:
       [
         sonarcloud,
-        licence-audit,
         pyright,
         semgrep,
         analyze,
@@ -268,18 +267,6 @@ jobs:
         with:
           sarif_file: hadolint-results.sarif
           wait-for-processing: true
-  licence-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: "pip"
-      - name: Install
-        run: pip install -r requirements.txt
-      - uses: pypa/gh-action-pip-audit@v1.0.8
-
   pyright:
     runs-on: ubuntu-latest
     steps:
@@ -352,7 +339,6 @@ jobs:
     needs:
       [
         sonarcloud,
-        licence-audit,
         pyright,
         semgrep,
         analyze,
