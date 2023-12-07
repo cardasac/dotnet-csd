@@ -21,6 +21,10 @@ permissions:
 jobs:
   review-with-sourcery:
     uses: ./.github/workflows/sourcery.yml
+    secrets: inherit
+    with:
+      python_version: $PYTHON_VERSION
+
 
   analyze:
     name: analyze
