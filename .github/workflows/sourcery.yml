@@ -1,0 +1,17 @@
+name: Reusable worfklows
+
+on:
+    workflow_call:
+
+jobs:
+    review-with-sourcery:
+        runs-on: ubuntu-latest
+        name: sourcery
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-python@v4
+            with:
+              python-version: ${{ env.PYTHON_VERSION }}
+          - uses: sourcery-ai/action@v1
+            with:
+              token: ${{ secrets.SOURCERY_TOKEN }}
