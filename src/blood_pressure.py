@@ -16,7 +16,6 @@ def calculate_blood_pressure(
     diastolic_min = 40
     diastolic_max = 100
 
-
     if not isinstance(systolic, int) or not isinstance(diastolic, int):
         raise TypeError
 
