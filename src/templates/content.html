@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+<!-- {% block head
+    %}
+    {{ super() }}
+    <style type="text/css">
+  .important {
+    color: #336699;
+  }
+</style>
+{% endblock %} -->
+{% block content %}
+    <h1>Index</h1>
+    <!-- {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="alert alert-success">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %} -->
+    <form method="POST" action="/">
+        <div class="mb-3">
+            {{ form.csrf_token }} {{ form.systolic.label(class="form-label") }} {{ form.systolic(class="form-control") }}
+        </div>
+        <div class="mb-3">{{ form.diastolic.label(class="form-label") }} {{ form.diastolic(class="form-control") }}</div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if form.errors %}
+        <ul class="errors">
+            {% for error in form.errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+    {% if result %}
+        <div class="alert alert-success">
+            <p class="mb-0">Your blood pressure is {{ result }}.</p>
+        </div>
+    {% endif %}
+{% endblock %}

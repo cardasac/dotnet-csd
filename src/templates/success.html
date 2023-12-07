@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+    <h1>Index</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="alert alert-success">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    {{ result }}
+    dwada
+{% endblock %}

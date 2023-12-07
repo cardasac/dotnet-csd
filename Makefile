@@ -32,9 +32,9 @@ lint:
 	poetry run semgrep scan --config auto
 
 format:
-	poetry run black --line-length=79 $(SRC)
+	poetry run black --line-length=79 $(SRC) tests
 	# poetry run docformatter --in-place -r $(SRC)
-	poetry run sourcery review --fix $(SRC)
+	poetry run sourcery review --fix $(SRC) tests
 	poetry run ruff --fix .
 
 update-deps:
