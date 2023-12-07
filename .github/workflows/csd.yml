@@ -35,7 +35,6 @@ jobs:
       [
         sonarcloud,
         linting,
-        linting,
       ]
     permissions:
       contents: read
