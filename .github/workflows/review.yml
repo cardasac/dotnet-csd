@@ -3,6 +3,7 @@ on: [pull_request]
 
 permissions:
   contents: read
+  packages: write
   actions: write
   statuses: write
   pull-requests: read
