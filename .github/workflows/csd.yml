@@ -22,6 +22,10 @@ jobs:
   linting:
     uses: ./.github/workflows/linting.yml
     secrets: inherit
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     with:
       python_version: 3.11
 

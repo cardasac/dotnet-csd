@@ -21,10 +21,6 @@ jobs:
         with:
           token: ${{ secrets.SOURCERY_TOKEN }}
   semgrep:
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
     name: semgrep/ci
     runs-on: ubuntu-latest
     container:
