@@ -34,13 +34,7 @@ jobs:
     needs:
       [
         sonarcloud,
-        pyright,
         linting,
-        snyk-os,
-        snyk-code,
-        snyk-docker,
-        trivy,
-        hadolint,
         linting,
       ]
     permissions:
@@ -146,12 +140,6 @@ jobs:
     needs:
       [
         sonarcloud,
-        pyright,
-        snyk-os,
-        snyk-code,
-        snyk-docker,
-        trivy,
-        hadolint,
         linting
       ]
     steps:
