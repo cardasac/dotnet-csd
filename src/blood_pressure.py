@@ -25,18 +25,16 @@ def calculate_blood_pressure(
     if systolic > systolic_max or diastolic > diastolic_max:
         raise ValueError
 
-    if (systolic > systolic_pre_high and systolic < systolic_high) or (
-        diastolic > diastolic_pre_high and diastolic < diastolic_high
-    ):
-        return "Pre-High"
-    if (systolic >= systolic_high) or (diastolic >= diastolic_high):
+    if systolic > systolic_high or diastolic > diastolic_high:
         return "High"
 
-    systolic_low = 90
-    diastolic_low = 60
+    if (
+        systolic > systolic_pre_high
+        and systolic < systolic_high
+        or diastolic > diastolic_pre_high
+    ):
+        return "Pre-High"
 
-    return (
-        "Low"
-        if systolic < systolic_low or diastolic < diastolic_low
-        else "Ideal"
-    )
+    systolic_low = 90
+
+    return "Low" if systolic < systolic_low else "Ideal"

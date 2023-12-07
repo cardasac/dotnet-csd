@@ -2,13 +2,25 @@
 {% block title %}Result{% endblock %}
 {% block content %}
     <h1>Index</h1>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="alert alert-success">
-                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    {{ result }}
-    dwada
+    {% if result == "Ideal" %}
+        <p>
+            You are looking good! Your blood pressure is <mark class="text-success">{{ result }}</mark>.
+        </p>
+    {% endif %}
+    {% if result == "Low" %}
+        <p>
+            You might be feeling dizzy! Your blood pressure is <mark class="text-primary"> {{ result }}</mark>.
+        </p>
+    {% endif %}
+    {% if result == "Pre-High" %}
+        <p>
+            You are starting to feel unwell! Your blood pressure is <mark class="text-warning bg-dark">{{ result }}</mark>.
+        </p>
+    {% endif %}
+    {% if result == "High" %}
+        <p>
+            Be careful! Your blood pressure is <mark class="text-danger">{{ result }}</mark>.
+        </p>
+    {% endif %}
+    <img src="data:image/png;base64,{{ img_data }}" alt="">
 {% endblock %}

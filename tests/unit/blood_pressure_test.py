@@ -10,6 +10,9 @@ from src.blood_pressure import calculate_blood_pressure
         (125, 85, "Pre-High"),
         (145, 95, "High"),
         (85, 65, "Low"),
+        (80, 60, "Low"),
+        (110, 85, "Pre-High"),
+        (130, 95, "High"),
     ],
 )
 def test_calculate_blood_pressure_happy_path(systolic, diastolic, expected):
@@ -28,7 +31,7 @@ def test_calculate_blood_pressure_happy_path(systolic, diastolic, expected):
         (190, 100, "High"),
         (120, 80, "Ideal"),
         (125, 80, "Pre-High"),
-        (140, 90, "High"),
+        (140, 90, "Pre-High"),
     ],
 )
 def test_calculate_blood_pressure_edge_cases(systolic, diastolic, expected):

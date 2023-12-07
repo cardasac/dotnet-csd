@@ -12,10 +12,9 @@
 {% block content %}
     <h1>Index</h1>
     <form method="POST" action="/">
-        {{ form.csrf_token }} 
-
+        {{ form.csrf_token }}
         <div class="mb-3">
-            {{ form.systolic.label(class="form-label") }} 
+            {{ form.systolic.label(class="form-label") }}
             {{ form.systolic(class="form-control") }}
         </div>
         <div class="mb-3">{{ form.diastolic.label(class="form-label") }} {{ form.diastolic(class="form-control") }}</div>
