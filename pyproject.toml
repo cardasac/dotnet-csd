@@ -75,7 +75,3 @@ reportUnusedExpression = true
 pythonVersion = "3.11"
 pythonPlatform = "Linux"
 typeCheckingMode = "basic"
-
-executionEnvironments = [
-  { root = "src" },
-]
