@@ -11,7 +11,6 @@ on:
 jobs:
   review-with-sourcery:
     runs-on: ubuntu-latest
-    name: ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
