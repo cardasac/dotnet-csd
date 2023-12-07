@@ -13,7 +13,7 @@ sentry-sdk = {extras = ["flask"], version = "^1.38.0"}
 
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.1.6"
+ruff = "^0.1.7"
 black = "^23.11.0"
 semgrep = "^1.51.0"
 sourcery = "^1.14.0"
