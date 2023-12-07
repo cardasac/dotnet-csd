@@ -7,7 +7,8 @@ ROOT = Blueprint("root", __name__)
 
 
 @ROOT.route("/", methods=["GET", "POST"])
-def submit():
+def submit() -> str:
+    """Submit the form."""
     form = MyForm()
 
     if form.validate_on_submit():

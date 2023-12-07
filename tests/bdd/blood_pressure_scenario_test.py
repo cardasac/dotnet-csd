@@ -42,27 +42,25 @@ def test_calculate_blood_pressure_edge_cases(systolic, diastolic, expected):
 
 # Error cases
 @pytest.mark.parametrize(
-    "systolic, diastolic, error, error_message",
+    "systolic, diastolic, error",
     [
-        (None, 80, TypeError, "Systolic or diastolic is not an integer"),
-        (120, None, TypeError, "Systolic or diastolic is not an integer"),
-        ("120", 80, TypeError, "Systolic or diastolic is not an integer"),
-        (120, "80", TypeError, "Systolic or diastolic is not an integer"),
-        (69, 80, ValueError, "Systolic or diastolic is too low"),
-        (120, 39, ValueError, "Systolic or diastolic is too low"),
-        (191, 80, ValueError, "Systolic or diastolic is too high"),
-        (120, 101, ValueError, "Systolic or diastolic is too high"),
+        (None, 80, TypeError),
+        (120, None, TypeError),
+        ("120", 80, TypeError),
+        (120, "80", TypeError),
+        (69, 80, ValueError),
+        (120, 39, ValueError),
+        (191, 80, ValueError),
+        (120, 101, ValueError),
     ],
 )
 def test_calculate_blood_pressure_error_cases(
     systolic,
     diastolic,
     error,
-    error_message,
 ):
-    with pytest.raises(error) as exc_info:
+    with pytest.raises(error):
         calculate_blood_pressure(systolic, diastolic)
-    assert str(exc_info.value) == error_message
 
 
 scenarios("features/blood_pressure.feature")

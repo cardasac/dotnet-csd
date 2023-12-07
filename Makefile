@@ -33,7 +33,7 @@ lint:
 
 format:
 	poetry run black --line-length=79 $(SRC) tests
-	# poetry run docformatter --in-place -r $(SRC)
+	poetry run docformatter --in-place -r $(SRC)
 	poetry run sourcery review --fix $(SRC) tests
 	poetry run ruff --fix .
 

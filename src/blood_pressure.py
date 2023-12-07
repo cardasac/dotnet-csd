@@ -16,14 +16,15 @@ def calculate_blood_pressure(
     diastolic_min = 40
     diastolic_max = 100
 
+
     if not isinstance(systolic, int) or not isinstance(diastolic, int):
-        raise TypeError("Systolic or diastolic is not an integer")
+        raise TypeError
 
     if systolic < systolic_min or diastolic < diastolic_min:
-        raise ValueError("Systolic or diastolic is too low")
+        raise ValueError
 
     if systolic > systolic_max or diastolic > diastolic_max:
-        raise ValueError("Systolic or diastolic is too high")
+        raise ValueError
 
     if (systolic > systolic_pre_high and systolic < systolic_high) or (
         diastolic > diastolic_pre_high and diastolic < diastolic_high
