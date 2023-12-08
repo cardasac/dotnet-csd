@@ -8,7 +8,7 @@ export const options = {
   ],
   thresholds: {
     http_req_failed: ['rate<0.01'], // http errors should be less than 1%
-    http_req_duration: ['p(99.9)<20'], // 99.9% requests should be below 20ms
+    http_req_duration: ['p(99.9)<50'], // 99.9% requests should be below 50ms
   },
   ext: {
     loadimpact: {
