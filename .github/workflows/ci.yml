@@ -7,6 +7,21 @@ on:
         description: 'Python version'
         required: true
         type: string
+      TF_WORKSPACE:
+        description: 'Terraform Cloud workspace'
+        required: true
+        type: string
+      CONFIG_DIRECTORY:
+        description: 'Terraform configuration directory'
+        required: true
+        type: string
+    secrets:
+      TF_API_TOKEN:
+        required: true
+
+env:
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_CLOUD_ORGANIZATION: "alviralex"
 
 jobs:
   review-with-sourcery:
@@ -252,14 +267,14 @@ jobs:
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: plan-upload
         with:
-          workspace: ${{ env.TF_WORKSPACE }}
-          directory: ${{ env.CONFIG_DIRECTORY }}
+          workspace: ${{ inputs.TF_WORKSPACE }}
+          directory: ${{ inputs.CONFIG_DIRECTORY }}
           speculative: true
       - name: Create Plan Run
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         id: plan-run
         with:
-          workspace: ${{ env.TF_WORKSPACE }}
+          workspace: ${{ inputs.TF_WORKSPACE }}
           configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
           plan_only: true
       - name: Get Plan Output

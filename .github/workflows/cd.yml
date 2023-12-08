@@ -34,6 +34,9 @@ jobs:
       pull-requests: write
     with:
       python_version: 3.11
+      CONFIG_DIRECTORY: "./"
+      TF_WORKSPACE: csd
+
   terraform-apply:
     runs-on: ubuntu-latest
     needs: ci
