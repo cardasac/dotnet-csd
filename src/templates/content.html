@@ -1,33 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
-<!-- {% block head
-    %}
-    {{ super() }}
-    <style type="text/css">
-  .important {
-    color: #336699;
-  }
-</style>
-{% endblock %} -->
+{% from "_formhelpers.html" import render_field %}
 {% block content %}
-    <h1>Index</h1>
+    <h1>Blood Pressure Check</h1>
     <form method="POST" action="/">
         {{ form.csrf_token }}
-        <div class="mb-3">
-            {{ form.systolic.label(class="form-label") }}
-            {{ form.systolic(class="form-control") }}
-        </div>
-        <div class="mb-3">{{ form.diastolic.label(class="form-label") }} {{ form.diastolic(class="form-control") }}</div>
+        {{ render_field(form.systolic) }}
+        {{ render_field(form.diastolic) }}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    {% if form.errors %}
-        <ul class="errors">
-            {% for error in form.errors %}<li>{{ error }}</li>{% endfor %}
-        </ul>
-    {% endif %}
-    {% if result %}
-        <div class="alert alert-success">
-            <p class="mb-0">Your blood pressure is {{ result }}.</p>
-        </div>
-    {% endif %}
 {% endblock %}
