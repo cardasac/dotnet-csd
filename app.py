@@ -25,7 +25,9 @@ def create_app() -> Flask:
 
     if app.debug is False:
         xray_recorder.configure(
-            service="csd", dynamic_naming="*.alviralex.com",
+            service="csd",
+            dynamic_naming="*.alviralex.com",
+            plugins=("ElasticBeanstalkPlugin", "EC2Plugin"),
         )
         XRayMiddleware(app, xray_recorder)
 
