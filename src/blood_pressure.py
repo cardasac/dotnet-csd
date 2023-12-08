@@ -36,5 +36,10 @@ def calculate_blood_pressure(
         return "Pre-High"
 
     systolic_low = 90
+    diastolic_low = 60
 
-    return "Low" if systolic < systolic_low else "Ideal"
+    return (
+        "Low"
+        if systolic < systolic_low and diastolic < diastolic_low
+        else "Ideal"
+    )
