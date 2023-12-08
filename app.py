@@ -16,7 +16,7 @@ def create_app() -> Flask:
     csrf = CSRFProtect()
     csrf.init_app(app)
     csp = {"default-src": ["'self'", "cdn.jsdelivr.net"]}
-    Talisman(app, content_security_policy=csp)
+    Talisman(app, force_https=False, content_security_policy=csp)
     app.config.from_prefixed_env()
 
     app.register_blueprint(ROOT)
