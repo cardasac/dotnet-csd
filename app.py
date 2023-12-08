@@ -3,10 +3,16 @@ from __future__ import annotations
 
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
-from flask import Flask
+from flask import Flask, render_template
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from src.root import ROOT
+from werkzeug.exceptions import HTTPException
+
+
+def handle_exception(error: Exception) -> str:
+    """Handle all exceptions."""
+    return render_template("500_generic.html", error=error.description)
 
 
 def create_app() -> Flask:
@@ -20,6 +26,7 @@ def create_app() -> Flask:
     }
     Talisman(app, force_https=False, content_security_policy=csp)
     app.config.from_prefixed_env()
+    app.register_error_handler(HTTPException, handle_exception)
 
     app.register_blueprint(ROOT)
 
