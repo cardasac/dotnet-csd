@@ -1,6 +1,4 @@
 name: webapp
-concurrency:
-  group: ${{ github.workflow }}
 env:
   PYTHON_VERSION: 3.11
   IMAGE_NAME: ${{ github.repository }}
@@ -147,6 +145,8 @@ jobs:
           eb appversion -c -l $GITHUB_RUN_NUMBER
   deploy-staging:
     runs-on: ubuntu-latest
+    concurrency:
+      group: staging_environment
     environment:
       name: staging
       url: https://csd-staging.alviralex.com
@@ -171,6 +171,8 @@ jobs:
           eb setenv SENTRY_RELEASE=$GITHUB_RUN_NUMBER
   deploy-production:
     runs-on: ubuntu-latest
+    concurrency:
+      group: production_environment
     environment:
       name: production
       url: https://csd-production.alviralex.com
