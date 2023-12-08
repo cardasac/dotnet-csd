@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import sentry_sdk
 from flask import Flask
+from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
@@ -14,6 +15,8 @@ def create_app() -> Flask:
     app = Flask(__name__, template_folder="src/templates")
     csrf = CSRFProtect()
     csrf.init_app(app)
+    csp = {"default-src": ["'self'", "cdn.jsdelivr.net"]}
+    Talisman(app, content_security_policy=csp)
     app.config.from_prefixed_env()
 
     app.register_blueprint(ROOT)
