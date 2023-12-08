@@ -1,19 +1,26 @@
 terraform {
   required_providers {
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = ">= 3.6.0"
     }
-        aws = {
+    aws = {
       version = ">= 5.30.0"
+    }
+  }
+  cloud {
+    organization = "alviralex"
+
+    workspaces {
+      name = "csd"
     }
   }
   required_version = ">= 1.6"
 }
 
 resource "random_string" "random" {
-  length           = 16
-  special          = true
+  length  = 16
+  special = true
 }
 
 resource "aws_elastic_beanstalk_application" "csd" {
