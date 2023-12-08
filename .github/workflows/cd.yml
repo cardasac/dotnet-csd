@@ -149,6 +149,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
+      url: https://csd-staging.alviralex.com
     needs: [build, docker-publish, terraform-apply]
     steps:
       - uses: actions/checkout@v4
@@ -172,6 +173,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+      url: https://csd-production.alviralex.com
     needs: [k6_load_test, zap_scan, cypress-run]
     steps:
       - uses: actions/checkout@v4

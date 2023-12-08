@@ -69,7 +69,17 @@ locals {
       namespace = "aws:elasticbeanstalk:application:environment"
       name      = "FLASK_SECRET_KEY"
       value     = random_string.random.result
-    }
+    },
+    {
+      namespace = "aws:elbv2:listener:default"
+      name      = "ListenerEnabled"
+      value     = "false"
+    },
+    {
+      namespace = "aws:elbv2:listener:443"
+      name      = "Protocol"
+      value     = "HTTPS"
+    },
   ]
 
   environment_settings = {
@@ -80,12 +90,7 @@ locals {
         value     = "staging"
       },
       {
-        namespace = "aws:elbv2:listener:default"
-        name      = "Protocol"
-        value     = "HTTPS"
-      },
-      {
-        namespace = "aws:elbv2:listener:default"
+        namespace = "aws:elbv2:listener:443"
         name      = "SSLCertificateArns"
         value     = aws_acm_certificate.staging_domain.arn
       },
@@ -95,7 +100,12 @@ locals {
         namespace = "aws:elasticbeanstalk:application:environment"
         name      = "SENTRY_ENVIRONMENT"
         value     = "production"
-      }
+      },
+      {
+        namespace = "aws:elbv2:listener:443"
+        name      = "SSLCertificateArns"
+        value     = aws_acm_certificate.production_domain.arn
+      },
     ]
   }
 }
@@ -105,9 +115,15 @@ data "aws_route53_zone" "main_zone" {
   private_zone = false
 }
 
+data "aws_elastic_beanstalk_hosted_zone" "current" {}
+
+
 resource "aws_acm_certificate" "staging_domain" {
   domain_name       = "csd-staging.alviralex.com"
   validation_method = "DNS"
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_route53_record" "staging_records" {
@@ -132,12 +148,68 @@ resource "aws_acm_certificate_validation" "staging_validation" {
   validation_record_fqdns = [for record in aws_route53_record.staging_records : record.fqdn]
 }
 
+resource "aws_route53_record" "staging_subdomain" {
+  zone_id = data.aws_route53_zone.main_zone.zone_id
+  name    = "csd-staging.alviralex.com"
+  type    = "A"
+
+  alias {
+    name                   = aws_elastic_beanstalk_environment.staging.cname
+    zone_id                = data.aws_elastic_beanstalk_hosted_zone.current.id
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_acm_certificate" "production_domain" {
+  domain_name       = "csd-production.alviralex.com"
+  validation_method = "DNS"
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "production_records" {
+  for_each = {
+    for dvo in aws_acm_certificate.production_domain.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.main_zone.zone_id
+}
+
+resource "aws_acm_certificate_validation" "production_validation" {
+  certificate_arn         = aws_acm_certificate.production_domain.arn
+  validation_record_fqdns = [for record in aws_route53_record.production_records : record.fqdn]
+}
+
+resource "aws_route53_record" "production_subdomain" {
+  zone_id = data.aws_route53_zone.main_zone.zone_id
+  name    = "csd-production.alviralex.com"
+  type    = "A"
+
+  alias {
+    name                   = aws_elastic_beanstalk_environment.production.cname
+    zone_id                = data.aws_elastic_beanstalk_hosted_zone.current.id
+    evaluate_target_health = true
+  }
+}
+
+
+
 resource "aws_elastic_beanstalk_environment" "staging" {
   name                = "staging"
   application         = aws_elastic_beanstalk_application.csd.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.6 running Python 3.11"
   cname_prefix        = "csd-staging"
-
+  depends_on          = [aws_acm_certificate_validation.staging_validation]
   dynamic "setting" {
     for_each = concat(local.common_settings, local.environment_settings.staging)
     content {

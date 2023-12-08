@@ -20,6 +20,6 @@ export const options = {
 }
 
 export default function main() {
-  http.get(`http://${__ENV.APP_HOSTNAME}/`)
+  http.get(`https://${__ENV.APP_HOSTNAME}/`)
   sleep(1)
 }
