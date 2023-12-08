@@ -24,7 +24,9 @@ def create_app() -> Flask:
     app.register_blueprint(ROOT)
 
     if app.debug is False:
-        xray_recorder.configure(service="csd")
+        xray_recorder.configure(
+            service="csd", dynamic_naming="*.alviralex.com",
+        )
         XRayMiddleware(app, xray_recorder)
 
     return app
