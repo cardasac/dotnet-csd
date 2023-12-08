@@ -1,3 +1,21 @@
+terraform {
+  required_providers {
+    random = {
+      source = "hashicorp/random"
+      version = ">= 3.6.0"
+    }
+        aws = {
+      version = ">= 5.30.0"
+    }
+  }
+  required_version = ">= 1.6"
+}
+
+resource "random_string" "random" {
+  length           = 16
+  special          = true
+}
+
 resource "aws_elastic_beanstalk_application" "csd" {
   name        = "csd"
   description = "Main app"
@@ -39,12 +57,16 @@ locals {
       namespace = "aws:elasticbeanstalk:application:environment"
       name      = "SENTRY_DSN"
       value     = var.sentry_dns
+    },
+    {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = "FLASK_SECRET_KEY"
+      value     = random_string.random.result
     }
   ]
 
   environment_settings = {
     staging = [
-
       {
         namespace = "aws:elasticbeanstalk:application:environment"
         name      = "SENTRY_ENVIRONMENT"
