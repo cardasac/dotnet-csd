@@ -28,11 +28,6 @@ resource "aws_elastic_beanstalk_application" "csd" {
   description = "Main app"
 }
 
-variable "sentry_dns" {
-  type      = string
-  sensitive = true
-}
-
 locals {
   common_settings = [
     {
@@ -69,11 +64,6 @@ locals {
       namespace = "aws:ec2:instances"
       name      = "InstanceTypes"
       value     = "t4g.micro"
-    },
-    {
-      namespace = "aws:elasticbeanstalk:application:environment"
-      name      = "SENTRY_DSN"
-      value     = var.sentry_dns
     },
     {
       namespace = "aws:elasticbeanstalk:application:environment"
