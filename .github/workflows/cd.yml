@@ -221,7 +221,7 @@ jobs:
           filename: load_tests/main.js
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
-        env: 
+        env:
           APP_HOSTNAME: ${{ secrets.APP_HOSTNAME }}
   cypress-run:
     runs-on: ubuntu-latest
