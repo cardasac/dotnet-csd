@@ -15,7 +15,10 @@ def create_app() -> Flask:
     app = Flask(__name__, template_folder="src/templates")
     csrf = CSRFProtect()
     csrf.init_app(app)
-    csp = {"default-src": ["'self'", "cdn.jsdelivr.net"]}
+    csp = {
+        "default-src": ["'self'", "cdn.jsdelivr.net"],
+        "img-src": ["'self' data:"],
+    }
     Talisman(app, force_https=False, content_security_policy=csp)
     app.config.from_prefixed_env()
 
