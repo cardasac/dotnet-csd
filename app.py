@@ -1,12 +1,11 @@
 """Main entry point to the app."""
 from __future__ import annotations
 
-import sentry_sdk
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 from flask import Flask
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
-from sentry_sdk.integrations.flask import FlaskIntegration
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 from src.root import ROOT
 
 
@@ -24,21 +23,11 @@ def create_app() -> Flask:
 
     app.register_blueprint(ROOT)
 
-    if app.config["TESTING"] is False:
-        sentry_sdk.init(
-            # Set traces_sample_rate to 1.0 to capture 100%
-            # of transactions for performance monitoring.
-            traces_sample_rate=1.0,
-            # Set profiles_sample_rate to 1.0 to profile 100%
-            # of sampled transactions.
-            # We recommend adjusting this value in production.
-            profiles_sample_rate=1.0,
-            enable_tracing=True,
-            auto_session_tracking=True,
-            integrations=[FlaskIntegration()],
-        )
+    if app.debug is False:
+        xray_recorder.configure(service="csd")
+        XRayMiddleware(app, xray_recorder)
 
     return app
 
 
-APP = SentryWsgiMiddleware(create_app())
+APP = create_app()

@@ -41,6 +41,16 @@ locals {
       value     = "aws-elasticbeanstalk-service-role"
     },
     {
+      namespace = "aws:elasticbeanstalk:xray"
+      name      = "XRayEnabled"
+      value     = "true"
+    },
+        {
+      namespace = "aws:elasticbeanstalk:healthreporting:system"
+      name      = "SystemType"
+      value     = "enhanced"
+    },
+    {
       namespace = "aws:elasticbeanstalk:environment"
       name      = "LoadBalancerType"
       value     = "application"
@@ -86,7 +96,7 @@ locals {
     staging = [
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SENTRY_ENVIRONMENT"
+        name      = "AWS_XRAY_TRACING_NAME"
         value     = "staging"
       },
       {
@@ -98,7 +108,7 @@ locals {
     production = [
       {
         namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SENTRY_ENVIRONMENT"
+        name      = "AWS_XRAY_TRACING_NAME"
         value     = "production"
       },
       {
