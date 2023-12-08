@@ -25,6 +25,7 @@ jobs:
     permissions:
       actions: read
       contents: read
+      statuses: read
       security-events: write
     with:
       python_version: 3.11
