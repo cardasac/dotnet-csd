@@ -5,7 +5,7 @@ from flask import Flask
 
 def test_request_example(client: Flask):
     response = client.get("/")
-    assert b"Index</h1>" in response.data
+    assert b"Blood Pressure Check</h1>" in response.data
 
 
 def test_ideal_blood_pressure(client: Flask):
