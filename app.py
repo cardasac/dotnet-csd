@@ -15,7 +15,7 @@ def handle_exception(error: Exception) -> str:
     return render_template("500_generic.html", error=error.description)
 
 
-def create_app() -> Flask:
+def create_app(test_config: dict | None = None) -> Flask:
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, template_folder="src/templates")
     csrf = CSRFProtect()
@@ -30,15 +30,14 @@ def create_app() -> Flask:
 
     app.register_blueprint(ROOT)
 
-    if app.debug is False:
+    if test_config is None:
         xray_recorder.configure(
             service="csd",
             dynamic_naming="*.alviralex.com",
             plugins=("ElasticBeanstalkPlugin", "EC2Plugin"),
         )
         XRayMiddleware(app, xray_recorder)
+    else:
+        app.config.from_mapping(test_config)
 
     return app
-
-
-APP = create_app()
