@@ -10,7 +10,7 @@ from src.root import ROOT
 from werkzeug.exceptions import HTTPException
 
 
-def handle_exception(error: Exception) -> str:
+def handle_exception(error: HTTPException) -> str:
     """Handle all exceptions."""
     return render_template("500_generic.html", error=error.description)
 
@@ -23,8 +23,15 @@ def create_app(test_config: dict | None = None) -> Flask:
     csp = {
         "default-src": ["'self'", "cdn.jsdelivr.net"],
         "img-src": ["'self' data:"],
+        "frame-ancestors": ["'none'"],
+        "form-action": ["'self'"],
     }
-    Talisman(app, force_https=False, content_security_policy=csp)
+    Talisman(
+        app,
+        force_https=False,
+        frame_options="DENY",
+        content_security_policy=csp,
+    )
     app.config.from_prefixed_env()
     app.register_error_handler(HTTPException, handle_exception)
 
