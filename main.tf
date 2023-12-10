@@ -202,8 +202,6 @@ resource "aws_route53_record" "production_subdomain" {
   }
 }
 
-
-
 resource "aws_elastic_beanstalk_environment" "staging" {
   name                = "staging"
   application         = aws_elastic_beanstalk_application.csd.name
