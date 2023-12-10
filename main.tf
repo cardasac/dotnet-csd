@@ -235,3 +235,7 @@ resource "aws_elastic_beanstalk_environment" "production" {
     }
   }
 }
+
+resource "aws_s3_bucket" "csd_code_reviewer" {
+  bucket = "codeguru-reviewer-csd"
+}

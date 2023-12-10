@@ -6,7 +6,7 @@
         {% block head %}
             <title>
                 {% block title %}{% endblock %}
-            - My Webpage</title>
+            </title>
         {% endblock %}
         <link rel="shortcut icon"
               href="{{ url_for('static', filename='favicon.ico') }}">
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </nav>
-        <div id="content" class="container-sm">
+        <div id="content" class="container-sm mt-2">
             {% block content %}{% endblock %}
         </div>
         <script defer
