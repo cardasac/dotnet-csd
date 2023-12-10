@@ -248,11 +248,11 @@ resource "aws_s3_bucket_public_access_block" "csd_public_access_block" {
 }
 
 resource "aws_s3_bucket_policy" "mycompliantpolicy" {
-  bucket = "codeguru-reviewer-csd"
+  bucket = aws_s3_bucket.csd_code_reviewer.id
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Id      = "mycompliantpolicy"
+    Id      = "compliantpolicy"
     Statement = [
       {
         Sid       = "HTTPSOnly"
