@@ -6,7 +6,7 @@ permissions:
   packages: write
   actions: write
   statuses: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   dependency-review:
@@ -24,7 +24,7 @@ jobs:
       packages: write
       actions: write
       statuses: write
-      pull-requests: read
+      pull-requests: write
       security-events: write
     with:
       python_version: 3.11
