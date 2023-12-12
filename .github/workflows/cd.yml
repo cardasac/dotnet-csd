@@ -34,7 +34,7 @@ jobs:
       python_version: 3.11
       CONFIG_DIRECTORY: "./"
       TF_WORKSPACE: csd
-      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
 
   terraform-apply:
     runs-on: ubuntu-latest
