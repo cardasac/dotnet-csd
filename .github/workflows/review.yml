@@ -28,3 +28,5 @@ jobs:
       security-events: write
     with:
       python_version: 3.11
+      CONFIG_DIRECTORY: "./"
+      TF_WORKSPACE: csd
