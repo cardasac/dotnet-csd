@@ -5,6 +5,7 @@ terraform {
       version = ">= 3.6.0"
     }
     aws = {
+      source  = "hashicorp/aws"
       version = ">= 5.30.0"
     }
   }
@@ -35,6 +36,53 @@ locals {
       name      = "ServiceRole"
       value     = "aws-elasticbeanstalk-service-role"
     },
+
+    {
+      namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+      name      = "RollingUpdateEnabled"
+      value     = "true"
+    },
+    {
+      namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+      name      = "RollingUpdateType"
+      value     = "Immutable"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:cloudwatch:logs:health"
+      name      = "HealthStreamingEnabled"
+      value     = "true"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:cloudwatch:logs:health"
+      name      = "DeleteOnTerminate"
+      value     = "true"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:managedactions"
+      name      = "ManagedActionsEnabled"
+      value     = "true"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:managedactions"
+      name      = "PreferredStartTime"
+      value     = "Sat:00:30"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:managedactions"
+      name      = "ServiceRoleForManagedUpdates"
+      value     = "AWSServiceRoleForElasticBeanstalkManagedUpdates"
+    },
+
+    {
+      namespace = "aws:elasticbeanstalk:managedactions:platformupdate"
+      name      = "UpdateLevel"
+      value     = "minor"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:managedactions:platformupdate"
+      name      = "InstanceRefreshEnabled"
+      value     = "true"
+    },
     {
       namespace = "aws:elasticbeanstalk:xray"
       name      = "XRayEnabled"
@@ -44,6 +92,11 @@ locals {
       namespace = "aws:elasticbeanstalk:healthreporting:system"
       name      = "SystemType"
       value     = "enhanced"
+    },
+    {
+      namespace = "aws:elasticbeanstalk:healthreporting:system"
+      name      = "EnhancedHealthAuthEnabled"
+      value     = "true"
     },
     {
       namespace = "aws:elasticbeanstalk:environment"
@@ -247,7 +300,7 @@ resource "aws_s3_bucket_public_access_block" "csd_public_access_block" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "mycompliantpolicy" {
+resource "aws_s3_bucket_policy" "compliant_policy" {
   bucket = aws_s3_bucket.csd_code_reviewer.id
 
   policy = jsonencode({
