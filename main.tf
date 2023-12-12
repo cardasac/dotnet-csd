@@ -36,6 +36,17 @@ locals {
       name      = "ServiceRole"
       value     = "aws-elasticbeanstalk-service-role"
     },
+
+    {
+      namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+      name      = "RollingUpdateEnabled"
+      value     = "true"
+    },
+    {
+      namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+      name      = "RollingUpdateType"
+      value     = "Immutable"
+    },
     {
       namespace = "aws:elasticbeanstalk:cloudwatch:logs:health"
       name      = "HealthStreamingEnabled"
