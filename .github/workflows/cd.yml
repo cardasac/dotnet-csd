@@ -225,6 +225,7 @@ jobs:
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
         env:
+          K6_CLOUD_PROJECT_ID: "3673198"
           APP_HOSTNAME: ${{ secrets.APP_HOSTNAME }}
   cypress-run:
     runs-on: ubuntu-latest
