@@ -290,14 +290,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.1.1
         id: plan-upload
         with:
           workspace: ${{ inputs.TF_WORKSPACE }}
           directory: ${{ inputs.CONFIG_DIRECTORY }}
           speculative: true
       - name: Create Plan Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.1.1
         id: plan-run
         with:
           workspace: ${{ inputs.TF_WORKSPACE }}
