@@ -1,5 +1,5 @@
 name: Pull Request Review
-on: 
+on:
   pull_request:
     branches: ["main"]
     paths-ignore:
@@ -23,9 +23,9 @@ jobs:
   dependency-review:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout Repository'
+      - name: "Checkout Repository"
         uses: actions/checkout@v4
-      - name: 'Dependency Review'
+      - name: "Dependency Review"
         uses: actions/dependency-review-action@v3
   aws-code-guru:
     runs-on: ubuntu-latest

@@ -276,6 +276,7 @@ resource "aws_elastic_beanstalk_environment" "production" {
   application         = aws_elastic_beanstalk_application.csd.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.6 running Python 3.11"
   cname_prefix        = "csd-production"
+  depends_on          = [aws_acm_certificate_validation.production_validation]
 
   dynamic "setting" {
     for_each = concat(local.common_settings, local.environment_settings.production)
@@ -288,7 +289,8 @@ resource "aws_elastic_beanstalk_environment" "production" {
 }
 
 resource "aws_s3_bucket" "csd_code_reviewer" {
-  bucket = "codeguru-reviewer-csd"
+  bucket        = "codeguru-reviewer-csd"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_public_access_block" "csd_public_access_block" {
@@ -324,4 +326,35 @@ resource "aws_s3_bucket_policy" "compliant_policy" {
       },
     ]
   })
+}
+
+resource "aws_applicationinsights_application" "app_insights" {
+  resource_group_name = aws_resourcegroups_group.csd_resource_group.name
+  auto_config_enabled = true
+  auto_create         = true
+  cwe_monitor_enabled = true
+}
+
+resource "aws_resourcegroups_group" "csd_resource_group" {
+  name = "csd"
+
+  resource_query {
+    query = jsonencode({
+      ResourceTypeFilters = [
+        "AWS::EC2::Instance",
+        "AWS::ElasticLoadBalancingV2::LoadBalancer",
+        "AWS::ElasticBeanstalk::Environment"
+      ]
+
+      TagFilters = [
+        {
+          Key = "Name"
+          Values = [
+            "staging",
+            "production"
+          ]
+        }
+      ]
+    })
+  }
 }
