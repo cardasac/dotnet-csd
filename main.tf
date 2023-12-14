@@ -29,6 +29,21 @@ resource "aws_elastic_beanstalk_application" "csd" {
   description = "Main app"
 }
 
+variable "pyroscope_server_address" {
+  type      = string
+  sensitive = true
+}
+
+variable "pyroscope_basic_auth_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "pyroscope_basic_auth_password" {
+  type      = string
+  sensitive = true
+}
+
 locals {
   common_settings = [
     {
@@ -122,6 +137,21 @@ locals {
       namespace = "aws:elasticbeanstalk:application:environment"
       name      = "FLASK_SECRET_KEY"
       value     = random_string.random.result
+    },
+    {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = "PYROSCOPE_SERVER_ADDRESS"
+      value     = var.pyroscope_server_address
+    },
+    {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = "PYROSCOPE_BASIC_AUTH_USERNAME"
+      value     = var.pyroscope_basic_auth_username
+    },
+    {
+      namespace = "aws:elasticbeanstalk:application:environment"
+      name      = "PYROSCOPE_BASIC_AUTH_PASSWORD"
+      value     = var.pyroscope_basic_auth_password
     },
     {
       namespace = "aws:elbv2:listener:default"
