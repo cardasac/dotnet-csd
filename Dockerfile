@@ -9,6 +9,7 @@ FROM base AS serve
 
 COPY app.py .
 COPY src/templates ./src/templates
+COPY static .
 
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 USER nonroot
