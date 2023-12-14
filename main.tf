@@ -338,6 +338,7 @@ resource "aws_applicationinsights_application" "app_insights" {
   auto_config_enabled = true
   auto_create         = true
   cwe_monitor_enabled = true
+  grouping_type       = "ACCOUNT_BASED"
 }
 
 resource "aws_resourcegroups_group" "csd_resource_group" {
@@ -346,9 +347,7 @@ resource "aws_resourcegroups_group" "csd_resource_group" {
   resource_query {
     query = jsonencode({
       ResourceTypeFilters = [
-        "AWS::EC2::Instance",
-        "AWS::ElasticLoadBalancingV2::LoadBalancer",
-        "AWS::ElasticBeanstalk::Environment"
+        "AWS::AllSupported"
       ]
 
       TagFilters = [
