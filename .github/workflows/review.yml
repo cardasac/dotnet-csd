@@ -11,6 +11,7 @@ permissions:
   actions: write
   statuses: write
   pull-requests: write
+  security-events: write
 
 env:
   PYTHON_VERSION: 3.11

@@ -20,6 +20,7 @@ permissions:
   actions: write
   statuses: write
   pull-requests: write
+  security-events: write
 
 jobs:
   terraform-apply:
@@ -36,6 +37,9 @@ jobs:
         hadolint,
         pyright,
         sonarcloud,
+        aws-code-guru,
+        review-with-sourcery,
+        analyze,
       ]
 
     permissions:
@@ -248,13 +252,6 @@ jobs:
           path: cypress/videos
           if-no-files-found: ignore
 
-  dependency-review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout Repository"
-        uses: actions/checkout@v4
-      - name: "Dependency Review"
-        uses: actions/dependency-review-action@v3
   aws-code-guru:
     runs-on: ubuntu-latest
     steps:
@@ -311,7 +308,9 @@ jobs:
     name: analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
-
+    permissions:
+      security-events: write
+      actions: read
     strategy:
       fail-fast: false
       matrix:
