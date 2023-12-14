@@ -159,6 +159,11 @@ locals {
         name      = "SSLCertificateArns"
         value     = aws_acm_certificate.production_domain.arn
       },
+      {
+        namespace = "aws:elasticbeanstalk:command"
+        name      = "DeploymentPolicy"
+        value     = "Immutable"
+      },
     ]
   }
 }
