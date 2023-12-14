@@ -48,12 +48,15 @@ def create_app(test_config: dict | None = None) -> Flask:
         )
         XRayMiddleware(app, xray_recorder)
         pyroscope.configure(
-            application_name=os.getenv("AWS_XRAY_TRACING_NAME", "csd"),
+            application_name="csd",
             server_address=os.getenv("PYROSCOPE_SERVER_ADDRESS"),
             basic_auth_username=os.getenv("PYROSCOPE_BASIC_AUTH_USERNAME"),
             basic_auth_password=os.getenv("PYROSCOPE_BASIC_AUTH_PASSWORD"),
             detect_subprocesses=True,
             enable_logging=True,
+            tags={
+                "environment": '{os.getenv("AWS_XRAY_TRACING_NAME")}',
+            },
         )
     else:
         app.config.from_mapping(test_config)
