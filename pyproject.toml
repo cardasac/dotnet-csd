@@ -6,13 +6,12 @@ authors = ["Alexandru Constantin Cardas <calexc@alviralex.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10, <3.12"
+python = ">=3.10, <3.13"
 flask = "^3.0.0"
 flask-wtf = "^1.2.1"
 matplotlib = "^3.8.2"
 flask-talisman = "^1.1.0"
 aws-xray-sdk = "^2.12.1"
-
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
@@ -22,7 +21,6 @@ sourcery = "^1.14.0"
 mypy = "^1.7.1"
 djlint = "^1.34.0"
 docformatter = "^1.7.5"
-
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
@@ -54,7 +52,6 @@ concurrency = ["multiprocessing"]
 parallel = true
 sigterm = true
 omit = ["tests/*"]
-
 
 [tool.pyright]
 include = ["src"]
