@@ -13,7 +13,7 @@ def bp_values(systolic, diastolic):
     return {"systolic": systolic, "diastolic": diastolic}
 
 
-@when("I calculate the blood pressure", target_fixture="some_thing")
+@when("I calculate the blood pressure", target_fixture="result")
 def get_actual_blood_pressure(bp_values):
     """I calculate the blood pressure."""
     return calculate_blood_pressure(
@@ -23,5 +23,5 @@ def get_actual_blood_pressure(bp_values):
 
 
 @then(parsers.parse("I should get {bp:l} blood pressure"))
-def some_other(some_thing, bp):
-    assert some_thing == bp
+def compare_result(result, bp):
+    assert result == bp

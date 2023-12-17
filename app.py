@@ -1,6 +1,8 @@
 """Main entry point to the app."""
 from __future__ import annotations
 
+import os
+
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 from flask import Flask, render_template
@@ -15,7 +17,7 @@ def handle_exception(error: HTTPException) -> str:
     return render_template("500_generic.html", error=error.description)
 
 
-def create_app(test_config: dict | None = None) -> Flask:
+def create_app(app_config: dict | None = None) -> Flask:
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, template_folder="src/templates")
     csrf = CSRFProtect()
@@ -32,19 +34,20 @@ def create_app(test_config: dict | None = None) -> Flask:
         frame_options="DENY",
         content_security_policy=csp,
     )
-    app.config.from_prefixed_env()
-    app.register_error_handler(HTTPException, handle_exception)
 
+    app.config.from_prefixed_env()
+
+    app.register_error_handler(HTTPException, handle_exception)
     app.register_blueprint(ROOT)
 
-    if test_config is None:
+    if os.getenv("AWS_XRAY_TRACING_NAME", None):
         xray_recorder.configure(
             service="csd",
             dynamic_naming="*.alviralex.com",
             plugins=("ElasticBeanstalkPlugin", "EC2Plugin"),
         )
         XRayMiddleware(app, xray_recorder)
-    else:
-        app.config.from_mapping(test_config)
+
+    app.config.from_mapping(app_config)
 
     return app

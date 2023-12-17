@@ -2,48 +2,43 @@ import pytest
 from src.blood_pressure import calculate_blood_pressure
 
 
-# Happy path tests with various realistic test values
 @pytest.mark.parametrize(
     "systolic, diastolic, expected",
     [
         (115, 75, "Ideal"),
-        (125, 85, "Pre-High"),
+        (125, 85, "PreHigh"),
         (145, 95, "High"),
         (85, 65, "Ideal"),
         (80, 60, "Ideal"),
-        (110, 85, "Pre-High"),
+        (110, 85, "PreHigh"),
         (130, 95, "High"),
         (80, 50, "Low"),
     ],
 )
-def test_calculate_blood_pressure_happy_path(systolic, diastolic, expected):
-    # Act
+def test_calculate_blood_pressure_correct_values(
+    systolic, diastolic, expected,
+):
     result = calculate_blood_pressure(systolic, diastolic)
 
-    # Assert
     assert result == expected
 
 
-# Edge cases
 @pytest.mark.parametrize(
     "systolic, diastolic, expected",
     [
         (70, 40, "Low"),
         (190, 100, "High"),
         (120, 80, "Ideal"),
-        (125, 80, "Pre-High"),
-        (140, 90, "Pre-High"),
+        (125, 80, "PreHigh"),
+        (140, 90, "PreHigh"),
     ],
 )
 def test_calculate_blood_pressure_edge_cases(systolic, diastolic, expected):
-    # Act
     result = calculate_blood_pressure(systolic, diastolic)
 
-    # Assert
     assert result == expected
 
 
-# Error cases
 @pytest.mark.parametrize(
     "systolic, diastolic, error",
     [
@@ -55,6 +50,7 @@ def test_calculate_blood_pressure_edge_cases(systolic, diastolic, expected):
         (120, 39, ValueError),
         (191, 80, ValueError),
         (120, 101, ValueError),
+        (120.90, 101, TypeError),
     ],
 )
 def test_calculate_blood_pressure_error_cases(
