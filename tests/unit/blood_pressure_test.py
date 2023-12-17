@@ -1,4 +1,5 @@
 import pytest
+
 from src.blood_pressure import calculate_blood_pressure
 
 
@@ -16,7 +17,9 @@ from src.blood_pressure import calculate_blood_pressure
     ],
 )
 def test_calculate_blood_pressure_correct_values(
-    systolic, diastolic, expected,
+    systolic,
+    diastolic,
+    expected,
 ):
     result = calculate_blood_pressure(systolic, diastolic)
 

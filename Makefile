@@ -13,15 +13,14 @@ local:
 SRC := src app.py
 
 check-format:
-	poetry run black --line-length=79 --check $(SRC)
+	poetry run ruff format --check
 
 lint:
 	poetry run ruff $(SRC)
 	poetry run semgrep scan --config auto
 
 format:
-	poetry run black --line-length=79 $(SRC) tests
-	poetry run docformatter --in-place -r $(SRC)
+	poetry run ruff format
 	poetry run sourcery review --fix $(SRC) tests
 	poetry run ruff --fix .
 

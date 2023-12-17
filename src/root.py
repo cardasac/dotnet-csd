@@ -15,6 +15,7 @@ from flask import (
 )
 from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
+
 from src.blood_pressure import calculate_blood_pressure
 from src.forms import BloodPressureForm
 

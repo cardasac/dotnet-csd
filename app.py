@@ -8,8 +8,9 @@ from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 from flask import Flask, render_template
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
-from src.root import ROOT
 from werkzeug.exceptions import HTTPException
+
+from src.root import ROOT
 
 
 def handle_exception(error: HTTPException) -> str:
