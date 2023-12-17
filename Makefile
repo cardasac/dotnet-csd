@@ -8,7 +8,7 @@ clone:
 
 local:
 	docker build -t csd .
-	docker run -p 80:80 csd
+	docker run -p 80:80 -e FLASK_SECRET_KEY=$$(openssl rand -base64 32) csd
 
 SRC := src app.py
 

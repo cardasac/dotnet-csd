@@ -14,7 +14,7 @@ COPY static ./static
 
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 USER nonroot
-ENV FLASK_SECRET_KEY=$uuid
+
 HEALTHCHECK --interval=10m --timeout=5s \
     CMD curl -f http://localhost/ || exit 1
 
