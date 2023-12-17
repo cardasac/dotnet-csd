@@ -16,7 +16,7 @@ from flask import (
 from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 from src.blood_pressure import calculate_blood_pressure
-from src.forms import MyForm
+from src.forms import BloodPressureForm
 
 ROOT = Blueprint("root", __name__)
 
@@ -24,7 +24,7 @@ ROOT = Blueprint("root", __name__)
 @ROOT.post("/")
 def submit() -> str | Response:
     """Submit the form."""
-    form = MyForm()
+    form = BloodPressureForm()
 
     if form.validate_on_submit():
         systolic = request.form.get("systolic", type=int)
@@ -46,7 +46,7 @@ def submit() -> str | Response:
 @ROOT.get("/")
 def get_form() -> str:
     """Get the form."""
-    return render_template("content.html", form=MyForm())
+    return render_template("content.html", form=BloodPressureForm())
 
 
 @ROOT.get("/result")
@@ -59,18 +59,23 @@ def success() -> str:
 
     fig = Figure()
     ax = fig.subplots()
+
     ax.scatter(diastolic, systolic, marker="x", s=100, zorder=6, color="black")
+
     ax.set_yticks(np.arange(70, 200, 10))
     ax.set_xticks(np.arange(40, 110, 10))
+
     ax.add_patch(Rectangle(x_y_coordinates, 20, 20, color="indigo", zorder=5))
     ax.add_patch(Rectangle(x_y_coordinates, 40, 50, color="green", zorder=4))
     ax.add_patch(Rectangle(x_y_coordinates, 50, 70, color="yellow", zorder=3))
     ax.add_patch(Rectangle(x_y_coordinates, 60, 120, color="red", zorder=2))
+
     ax.set_ylabel("Systolic")
     ax.set_xlabel("Diastolic")
     ax.set_title("Blood Pressure Levels")
-    buf = BytesIO()
-    fig.savefig(buf, format="png")
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+
+    with BytesIO() as buf:
+        fig.savefig(buf, format="png")
+        data = base64.b64encode(buf.getbuffer()).decode("ascii")
 
     return render_template("success.html", result=result, img_data=data)

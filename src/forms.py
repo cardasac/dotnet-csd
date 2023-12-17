@@ -4,7 +4,7 @@ from wtforms import IntegerField
 from wtforms.validators import InputRequired, NumberRange
 
 
-class MyForm(FlaskForm):
+class BloodPressureForm(FlaskForm):
     """Form for blood pressure."""
 
     systolic = IntegerField(
