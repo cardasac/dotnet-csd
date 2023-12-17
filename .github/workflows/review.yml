@@ -279,6 +279,7 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.python.version=$PYTHON_VERSION
             -Dsonar.scm.provider=git
+            -Dsonar.terraform.provider.aws.version=5.30
             -Dsonar.python.xunit.reportPath=reports/test-results.xml
             -Dsonar.coverage.exclusions=load_tests/**,cypress.config.js,cypress/**,tests/**,app.py
         env:
