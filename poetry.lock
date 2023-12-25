@@ -1812,16 +1812,16 @@ files = [
 
 [[package]]
 name = "semgrep"
-version = "1.53.0"
+version = "1.54.3"
 description = "Lightweight static analysis for many languages. Find bug variants with patterns that look like source code."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "semgrep-1.53.0-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-any.whl", hash = "sha256:fb98da644abb24fc86cc1405d1158bdc1c88202a7eebb267eb8f913dc05b6895"},
-    {file = "semgrep-1.53.0-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-macosx_10_14_x86_64.whl", hash = "sha256:a5ea44f1e7ce4fcd66cf84e7d60570c7776de0bf1c6bc29e703517bcfd06f8d5"},
-    {file = "semgrep-1.53.0-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-macosx_11_0_arm64.whl", hash = "sha256:e5a765e5d175d66fd4ddf69fa6c5bd48012417fd85c9241ffc11e94f0dd76b4e"},
-    {file = "semgrep-1.53.0-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-musllinux_1_0_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6e801e0661a55df2a1d5cfa61d44c23361712a5d01167e64c982f4a853d1770b"},
-    {file = "semgrep-1.53.0.tar.gz", hash = "sha256:a32434286dd4c7245e0c7b3029c06304fd18440ca69e4165f55957df96cbfae1"},
+    {file = "semgrep-1.54.3-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-any.whl", hash = "sha256:9ddb706a479156a4c7186343f20fd13edfb9e97d013f1639b371dddd38cf7583"},
+    {file = "semgrep-1.54.3-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-macosx_10_14_x86_64.whl", hash = "sha256:fcff687b9ed605e91ad71f90dbe6f4b872c9d3d25dc64f6b2fc6098234bd815a"},
+    {file = "semgrep-1.54.3-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-macosx_11_0_arm64.whl", hash = "sha256:47128e71f0f110b05f03753f3aa1213e95a70e5da549d9fb2b7c7c45cc8a70a3"},
+    {file = "semgrep-1.54.3-cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311-none-musllinux_1_0_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d75debdba85d433608dd56f6ef421db271dfc35f8f329d7b11f91e5ac94b8140"},
+    {file = "semgrep-1.54.3.tar.gz", hash = "sha256:501cad0f5d7adf7e2a2011c619672dd2bdbe76608443274a9d1fbb90aaf3b661"},
 ]
 
 [package.dependencies]
@@ -2059,4 +2059,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10, <3.13"
-content-hash = "081c7c968ee09d906062a63e51be73a4e0eaa79873b85266574755403504c365"
+content-hash = "5ba53156ad599bd3170401b2a4caaed4a8fe568f15e0502a4df365f10804d912"
