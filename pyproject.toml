@@ -14,7 +14,7 @@ flask-talisman = "^1.1.0"
 aws-xray-sdk = "^2.12.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.1.6"
+ruff = "^0.1.9"
 semgrep = "^1.51.0"
 sourcery = "^1.14.0"
 mypy = "^1.7.1"
