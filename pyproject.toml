@@ -18,7 +18,7 @@ ruff = "^0.1.6"
 semgrep = "^1.51.0"
 sourcery = "^1.14.0"
 mypy = "^1.7.1"
-djlint = "^1.34.0"
+djlint = "^1.34.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
