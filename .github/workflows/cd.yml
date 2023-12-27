@@ -239,13 +239,13 @@ jobs:
         uses: cypress-io/github-action@v6
         env:
           CYPRESS_APP_URL: ${{ secrets.APP_URL }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
           if-no-files-found: ignore
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: cypress/videos
