@@ -13,13 +13,6 @@ permissions:
   pull-requests: write
   security-events: write
 
-env:
-  PYTHON_VERSION: 3.11
-  TF_CLOUD_ORGANIZATION: "alviralex"
-  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-  TF_WORKSPACE: csd
-  CONFIG_DIRECTORY: "./"
-
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
@@ -28,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
       - name: "Dependency Review"
         uses: actions/dependency-review-action@v3
+<<<<<<< Updated upstream
   aws-code-guru:
     runs-on: ubuntu-latest
     steps:
@@ -348,3 +342,5 @@ jobs:
               repo: context.repo.repo,
               body: output
             });
+=======
+>>>>>>> Stashed changes
