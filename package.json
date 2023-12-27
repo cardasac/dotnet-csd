@@ -1,14 +1,18 @@
 {
   "dependencies": {
+    "bootstrap": "^5.3.2",
     "cypress": "^13.6.1"
   },
   "name": "csd",
   "version": "1.0.0",
-  "main": "cypress.config.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build static/css/**.scss static/js/**.js --dist-dir static/dist"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.10.3",
+    "parcel": "^2.10.3"
+  }
 }

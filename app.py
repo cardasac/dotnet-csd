@@ -6,6 +6,7 @@ import os
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 from flask import Flask, render_template
+from flask_compress import Compress
 from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.exceptions import HTTPException
@@ -35,7 +36,8 @@ def create_app(app_config: dict | None = None) -> Flask:
         frame_options="DENY",
         content_security_policy=csp,
     )
-
+    compress = Compress()
+    compress.init_app(app)
     app.config.from_prefixed_env()
 
     app.register_error_handler(HTTPException, handle_exception)

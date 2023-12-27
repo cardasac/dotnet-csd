@@ -6,11 +6,18 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir gunicorn[gthread]==21.2.0
 
-FROM base AS serve
+FROM node:alpine AS static
+WORKDIR /app
 
+COPY static ./static
+COPY package.json package-lock.json .
+RUN npm ci && npm run build
+
+FROM base AS serve
+WORKDIR /app
 COPY app.py .
 COPY src ./src
-COPY static ./static
+COPY --from=static /app/static ./static
 
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 USER nonroot

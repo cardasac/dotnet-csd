@@ -22,5 +22,7 @@
             Be careful! Your blood pressure is <mark class="text-danger">{{ result }}</mark>.
         </p>
     {% endif %}
-    <img class="img-fluid" src="data:image/png;base64,{{ img_data }}" alt="Blood Pressure Chart">
+    <img class="img-fluid"
+         src="data:image/png;base64,{{ img_data }}"
+         alt="Blood Pressure Chart">
 {% endblock %}
