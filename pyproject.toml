@@ -12,6 +12,7 @@ flask-wtf = "^1.2.1"
 matplotlib = "^3.8.2"
 flask-talisman = "^1.1.0"
 aws-xray-sdk = "^2.12.1"
+flask-compress = "^1.14"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
