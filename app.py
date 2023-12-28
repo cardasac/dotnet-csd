@@ -11,6 +11,9 @@ from flask_talisman import Talisman
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.exceptions import HTTPException
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+from src import db
+from src.auth import AUTH
 from src.root import ROOT
 
 
@@ -25,11 +28,15 @@ def create_app(app_config: dict | None = None) -> Flask:
     csrf = CSRFProtect()
     csrf.init_app(app)
     csp = {
-        "default-src": ["'self'", "cdn.jsdelivr.net"],
+        "default-src": ["'self'"],
         "img-src": ["'self' data:"],
         "frame-ancestors": ["'none'"],
         "form-action": ["'self'"],
     }
+
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+    )
     Talisman(
         app,
         force_https=False,
@@ -40,8 +47,11 @@ def create_app(app_config: dict | None = None) -> Flask:
     compress.init_app(app)
     app.config.from_prefixed_env()
 
+    db.init_app(app)
+
     app.register_error_handler(HTTPException, handle_exception)
     app.register_blueprint(ROOT)
+    app.register_blueprint(AUTH)
 
     if os.getenv("AWS_XRAY_TRACING_NAME", None):
         xray_recorder.configure(

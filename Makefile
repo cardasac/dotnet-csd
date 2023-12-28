@@ -26,6 +26,7 @@ format:
 	poetry run ruff format
 	poetry run sourcery review --fix $(SRC) tests
 	poetry run ruff --fix .
-	djlint --reformat src/templates/ --profile="jinja"
+	poetry run djlint --reformat src/templates/ --profile="jinja"
+
 update-deps:
 	poetry export -f requirements.txt --output requirements.txt --without-hashes --without dev,test

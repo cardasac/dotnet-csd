@@ -22,8 +22,8 @@ COPY --from=static /app/static ./static
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 USER nonroot
 
-HEALTHCHECK --interval=10m --timeout=5s \
-    CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=5s --timeout=60s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8000 || exit 1
 
 EXPOSE 8000
 CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "--threads", "8", "--preload", "app:create_app()"]
