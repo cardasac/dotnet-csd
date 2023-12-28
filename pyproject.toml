@@ -9,11 +9,9 @@ readme = "README.md"
 python = ">=3.10, <3.13"
 flask = "^3.0.0"
 flask-wtf = "^1.2.1"
-matplotlib = "^3.8.2"
 flask-talisman = "^1.1.0"
-aws-xray-sdk = "^2.12.1"
-flask-compress = "^1.14"
 pydantic = "^2.5.3"
+matplotlib = "^3.8.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
